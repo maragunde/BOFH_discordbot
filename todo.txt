@@ -1,0 +1,3 @@
+* beta test
+* merge DB de karma y quotes actual?
+* hosting
