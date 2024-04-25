@@ -6,6 +6,7 @@ from datetime import datetime
 # Conectamos a la base
 database = sqlite3.connect('db/karma.db')
 cursor = database.cursor()
+
 # Campos que necesitamos en la base: Username, UserId de discord, Karma, y el budget de karma
 SQL = ("SELECT palabra, karmavalue, isuser FROM karma") 
 
@@ -13,9 +14,11 @@ SQL = ("SELECT palabra, karmavalue, isuser FROM karma")
 ################### FUNCION DE RANKING
 async def karmarankfunctx(ctx):
     FechaActual = datetime.now()
+    
     # Conectamos a la base
     database = sqlite3.connect('db/karma.db')
     cursor = database.cursor()
+    
     # Campos que necesitamos en la base: Username, Uy karma, ya presorteados
     SQL = ("SELECT karmavalue, palabra FROM karma ORDER BY karmavalue DESC LIMIT 10") 
 
@@ -30,7 +33,7 @@ async def karmarankfunctx(ctx):
         j += 1
     await ctx.send(message)
     
-    #Log
+    # Log
     print (FechaActual)
     print("Se ha ejecutado el comando de Karma Rank")  
     
@@ -53,6 +56,7 @@ async def karmawordfunctx(ctx, text):
     if not palabra_existe:
         await ctx.send(f"**{text}** no tiene karma.")
     else:
+        
         # Se manda mensaje
         SQL = "SELECT karmavalue FROM karma WHERE palabra = ?"
         cursor.execute(SQL, (text,))
@@ -82,6 +86,7 @@ async def karmagiversuserfunctx(ctx, text):
     if not palabra_existe:
         await ctx.send(f"**{text}** no tiene karmagiven.")
     else:
+        
         # Se manda mensaje
         SQL = "SELECT karmagiven FROM karma WHERE palabra = ?"
         cursor.execute(SQL, (text,))
@@ -131,7 +136,7 @@ async def karmagiversfunctx(ctx):
         x += 1
     await ctx.send(messageCTX)
 
-    #Log
+    # Log
     print (FechaActual)
     print("Se ha ejecutado el comando de Karma Givers")
 

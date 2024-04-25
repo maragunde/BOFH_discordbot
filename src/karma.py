@@ -7,6 +7,7 @@ from datetime import datetime
 # Conectamos a la base
 database = sqlite3.connect('db/discordusrs.db')
 cursor = database.cursor()
+
 # Campos que necesitamos en la base: Username, UserId de discord, Karma, y el budget de karma
 SQL = ("SELECT karmabudget, karma, username FROM usuarios") 
 
@@ -14,16 +15,18 @@ SQL = ("SELECT karmabudget, karma, username FROM usuarios")
 ################### FUNCION DE RANKING
 async def karmarankfunc(interaction):
     FechaActual = datetime.now()
+    
     # Conectamos a la base
     database = sqlite3.connect('db/discordusrs.db')
     cursor = database.cursor()
+    
     # Campos que necesitamos en la base: Username, Uy karma, ya presorteados
     SQL = ("SELECT karma, username FROM usuarios ORDER BY karma DESC LIMIT 10") 
 
     cursor.execute(SQL)
     rows = cursor.fetchall()
         
-    #Se crea el embed con la respuesta
+    # Se crea el embed con la respuesta
     embed = Embed(title=f"Karma ranking", description=f"A pedido de {interaction.user}", color = discord.Color.green(), )
     embed.set_thumbnail(url="https://pbs.twimg.com/profile_images/1356823152391843844/_Eooxcxc_400x400.png")
     j= 1
@@ -33,7 +36,7 @@ async def karmarankfunc(interaction):
     database.commit()
     database.close()
     
-    #Log
+    # Log
     print (FechaActual)
     print("Se ha ejecutado el comando de Karma Rank")
     return embed
@@ -92,6 +95,7 @@ async def karmauserfunc(interaction, user):
     # Conectamos a la base
     database = sqlite3.connect('db/discordusrs.db')
     cursor = database.cursor()
+    
     # Campos que necesitamos en la base: Username, y karmagiven, ya presorteados
     SQL = ("SELECT karma, username FROM usuarios WHERE username = ?") 
     cursor.execute(SQL, (str(user),))

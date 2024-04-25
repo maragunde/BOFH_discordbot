@@ -25,14 +25,15 @@ async def eurofun(interaction):
       print(FechaActual)
       print(f"Se ha ejecutado el comando euro por {interaction.user}")
 
-      #Se crea el embed con los precios del dolar
+      # Se crea el embed con los precios del dolar
       embed = Embed(title=f"El precio del Euro 💸 ", description=f"A pedido de {interaction.user}", color = discord.Color.green())
       embed.set_thumbnail(url="https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Euro_banknotes%2C_Europa_series.png/220px-Euro_banknotes%2C_Europa_series.png")
       embed.add_field(name =f"Cotizacion oficial", value =f"Compra = {EuroOficialcompra}   |   Venta = {EuroOficialventa}", inline=False)
       return embed
     else:
        print(f"Error en la API {responseEuro.status_code}")
-       #Se crea el embed
+       
+       # Se crea el embed
        embed = Embed(title=f"Error en la API ", description=f"A pedido de {interaction.user}", color = discord.Color.green())
        embed.add_field(name ="Error:", value =f"{responseEuro.status_code}", inline=False)
        return embed

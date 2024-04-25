@@ -21,9 +21,9 @@ async def climafun(interaction, city):
         CLIMA_key = os.getenv('WEATHER_key')
         params = {"key": f"{CLIMA_key}","q": city} 
         
-        #Llama a la API y trae la data
+        # Llama a la API y trae la data
         async with aiohttp.ClientSession() as session:
-            async with session.get(url, params=params) as res: # <-- Necesitamos la ciudad para checkear el clima en la API
+            async with session.get(url, params=params) as res: # <-- Necesitamos la ciudad para checkear el clima en la API. Este es un parametro obligatorio.
                 data = await res.json()
                 if res.status == 200:
                     
@@ -38,11 +38,11 @@ async def climafun(interaction, city):
                     condition = data["current"]["condition"]["text"]
                     image_url = "http:" + data["current"]["condition"]["icon"]
 
-        # Log
+                    # Log
                     print(FechaActual)
                     print(f"Se ha ejecutado el comando clima por {interaction.user}")
 
-        #Se crea el embed con los campos del clima
+                    # Se crea el embed con los campos del clima
                     embed = Embed(title=f"El clima en {location}, {country}", description=f"A pedido de {interaction.user}", color = discord.Color.green())   
                     embed.add_field(name = "Estado", value =f"{condition}",inline=True)
                     embed.add_field(name = "Temperatura", value =f"C: {temp_c} | ST: {feelslike_c}",inline=True)
@@ -52,7 +52,8 @@ async def climafun(interaction, city):
 
                     return embed
     except:
-        #En caso de error en la API, se imprime el mensaje
+        
+        # En caso de error en la API, se imprime el mensaje
         embed = Embed(title=f"Error en la API", description=f"Se ha producido un error", color = discord.Color.green())   
         embed.add_field(name = "Error", value =f"Avisar a algun root",inline=True)
         print("Error en la API")

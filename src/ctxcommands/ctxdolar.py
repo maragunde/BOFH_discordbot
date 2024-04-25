@@ -13,12 +13,12 @@ async def dolarfunctx(ctx):
     FechaActual = datetime.now()
 
     try:
-    #Llama a la API
+        # Llama a la API
         response = requests.get("https://dolarapi.com/v1/dolares")
 
         if response.status_code == 200:
 
-        #Carga el JSON en Python dictionary
+            # Carga el JSON en Python dictionary
             json_dolar = json.loads(response.text)          
             preciosdolares = response.json()
             dolares = []
@@ -27,7 +27,7 @@ async def dolarfunctx(ctx):
             print(FechaActual)
             print(f"Se ha ejecutado el comando dolar")
             
-        #Trae datos del precio del dolar para meter en el embed 
+            # Trae datos del precio del dolar para meter en el embed 
             for casa in preciosdolares:
                 nombre = casa["nombre"]
                 preciocompra = casa["compra"]
@@ -35,7 +35,7 @@ async def dolarfunctx(ctx):
                 dolar = {"nombre": nombre, "preciocompra": preciocompra, "precioventa": precioventa}
                 dolares.append(dolar)
 
-            #Se crea el mensaje ctx para mandar
+            # Se crea el mensaje ctx para mandar
             mensaje = 'El precio del dolar 💸\n'
             for dolar in dolares:
                 mensaje += f"{dolar['nombre']} --> Compra = {dolar['preciocompra']}   |   Venta = {dolar['precioventa']}\n"

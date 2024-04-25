@@ -35,5 +35,6 @@ async def eurofunctx(ctx):
 
     else:
        print(f"Error en la API {responseEuro.status_code}")
-       #Se crea el embed
+      
+       # Respuesta de error
        await ctx.send(f"Error en la API: {responseEuro.status_code}. Por favor avisar a algun root ")

@@ -3,9 +3,9 @@ from discord import Interaction
 from discord.ui import Select, View
 from src.fulboapi import fulboapicall
 
-#Esta sub-funcion funciona en conjunto con fulboapi.py. Lo separamos por una cuestion higienica, en caso de que en el futuro se quiten o agreguen ligas
+# Esta sub-funcion funciona en conjunto con fulboapi.py. Lo separamos por una cuestion higienica, en caso de que en el futuro se quiten o agreguen ligas
 
-#Se crea el select donde el usuario elige la liga
+# Se crea el select donde el usuario elige la liga
 async def futbolimport(message):
         select = Select(options =[
             discord.SelectOption(label="Premier League", value="PL", emoji="🏴󠁧󠁢󠁥󠁮󠁧󠁿"),
@@ -15,7 +15,7 @@ async def futbolimport(message):
             discord.SelectOption(label="Serie A", value="SA", emoji="🇮🇹")
         ])
 
-#Devuelve el resultado de la liga en base a lo que selecciono (trae cada resultado de fulboapy.py)
+       # Devuelve el resultado de la liga en base a lo que selecciono (trae cada resultado de fulboapy.py)
         async def respuesta(interaction):
              try:
               selected_value= interaction.data["values"][0]
@@ -36,5 +36,5 @@ async def futbolimport(message):
         view = View()
         view.add_item(select)
 
-#Pregunta que liga al usuario
+       # Pregunta que liga al usuario
         await  message.channel.send("Que liga?", view=view)

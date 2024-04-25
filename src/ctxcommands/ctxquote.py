@@ -19,7 +19,7 @@ async def quoteaddfunctx(ctx, quote):
 
     if len(quotesencontradas) == 0:
         
-        #Log
+        # Log
         print(FechaActual)
         print("Mensaje quoteado via !qadd")
         print(f"Quote: {quote}")
@@ -41,20 +41,20 @@ async def quoteaddfunctx(ctx, quote):
 async def quotefunctx(ctx):
     FechaActual = datetime.now()
 
-    #Conectamos a la base
+    # Conectamos a la base
     databasequotes = sqlite3.connect('db/quotes.db')
     cursorquotes = databasequotes.cursor()
 
-    #Selecciona una quote aleatoria de la DB
+    # Selecciona una quote aleatoria de la DB
     SQLcount = ("SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1")
     cursorquotes.execute(SQLcount)
     historicquote = cursorquotes.fetchone()
             
-    #Se crea el CTX con la respuesta
+    # Se crea el CTX con la respuesta
     await ctx.send("Quote random de sysarmy")
     await ctx.send(f"{historicquote[0]} - by {historicquote[1]} - Date: {historicquote[2]}")
 
-    #Log 
+    # Log 
     print(FechaActual)
     print("Comando !q ejecutado")
 
@@ -65,21 +65,21 @@ async def quotefunctx(ctx):
 async def qsearchfunctx(ctx, texto):
     FechaActual = datetime.now()
 
-    #Conectamos a la base de datos
+    # Conectamos a la base de datos
     databasequotes = sqlite3.connect('db/quotes.db')
     cursorbusqueda = databasequotes.cursor()
 
-    #Selecciona una quote de la DB en base a texto (ambos campos de usuario o de quote)
+    # Selecciona una quote de la DB en base a texto (ambos campos de usuario o de quote)
     SQLbuscaquote = ("SELECT * FROM quotes WHERE quote LIKE ? OR username LIKE ?")
     cursorbusqueda.execute(SQLbuscaquote, ('%' + texto + '%', '%' + texto + '%'))
     quotesencontrados = cursorbusqueda.fetchall()
     
-    #Si el texto no se encuentra quoteado, devuelve la respuesta
+    # Si el texto no se encuentra quoteado, devuelve la respuesta
     if len(quotesencontrados) == 0:
         await ctx.send(f"No se han encontrado quotes historicas de sysarmy para {texto}")
     else:
 
-        #Log 
+        # Log 
         print(FechaActual)
         print("Comando !qsearch search ejecutado")
 
@@ -87,6 +87,7 @@ async def qsearchfunctx(ctx, texto):
         await ctx.send(f"{str(len(quotesencontrados))} quotes encontradas para {texto}. Aca hay algunas:")
         for i, quote in enumerate(quotesencontrados[:4], start=1):
             await ctx.send(f"Quote de {quote[1]} - Fecha: {quote[2][0:10]} - {quote[0]}")
+            
             # Limita la cantidad de quotes a 4
             if i == 4:
                 break

@@ -23,11 +23,12 @@ async def criptofun(interaction):
         response = requests.get(url, headers={'Authorization': f'Bearer {COIN_key}'})
             
         if response.status_code == 200:
-            #Carga el JSON en Python dictionaro
+            
+            # Carga el JSON en Python dictionaro
             json_cripto = json.loads(response.text)          
             preciomoneda = []
                     
-            #Recorre el JSON y trate la info de las monedas que elegimos. Appendea en una lista para mostrar
+            # Recorre el JSON y trate la info de las monedas que elegimos. Appendea en una lista para mostrar
             for coin in json_cripto['data']['coins']:
                 if coin['symbol'] in ["BTC", "ETH", "LTC", "USDT", "SHIB", "DOGE", "SOL", "BSV", "BCH"]:
                     nombre = coin["name"],
@@ -40,7 +41,7 @@ async def criptofun(interaction):
             print(FechaActual)
             print(f"Se ha ejecutado el comando cripto por {interaction.user}")
 
-            #Se crea el embed con los precios de cripto
+            # Se crea el embed con los precios de cripto
             embed = Embed(title=f"La timba! 🚀 🌕", description=f"A pedido de {interaction.user}", color = discord.Color.green())
             embed.set_thumbnail(url="https://upload.wikimedia.org/wikipedia/en/d/d0/Dogecoin_Logo.png")              
             for moneda in preciomoneda:

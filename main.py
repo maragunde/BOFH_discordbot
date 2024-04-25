@@ -1,4 +1,4 @@
-#IMPORT DE LIBRERIAS PRINCIPALES
+# IMPORT DE LIBRERIAS PRINCIPALES
 import discord
 from discord import Intents, Client, Message, app_commands, Interaction, Embed, message, reaction
 from discord.ext import commands
@@ -6,10 +6,10 @@ import random, sqlite3
 from datetime import datetime
 from db.dbops import agregarusuario
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv # <-- Solo para las keys storeadas en venv
 
 
-#IMPORT DE COMANDOS TREE (NATIVOS DISCORD)
+# IMPORT DE COMANDOS TREE (NATIVOS DISCORD)
 from src.londonUnderground import Lines
 from src.subteBA import SubteBA
 from src.fulbo import futbolimport
@@ -26,7 +26,7 @@ from src.karma import karmagiversfunc, karmarankfunc, karmauserfunc
 from src.help import helpfunc
 from src.quote import quotefunc, qsearchfunc
 
-#IMPORT DE COMANDOS VERSION SIMPLE (FUNCIONAN POR TEXTO USANDO FUNCION CTX.SEND) 
+# IMPORT DE COMANDOS VERSION SIMPLE (FUNCIONAN POR TEXTO USANDO FUNCION CTX.SEND) 
 from src.ctxcommands.ctxclima import climafunctx
 from src.ctxcommands.ctxcripto import criptofunctx
 from src.ctxcommands.ctxdolar import dolarfunctx
@@ -74,7 +74,7 @@ from src.ctxcommands.ctxunderground import undergroundfunctx
 #  :-------------    -------------.    -------------.                                       
 
 # BOFH - Discord community bot for Sysarmy
-# Version 1.0 - March 2024
+# Version 1.0 - April / May 2024
 # by @Qwuor01 and @aragunde
 # License GPL v2 - Ver LICENSE en repositorio                       
 ###########################################################################################################
@@ -105,8 +105,6 @@ async def on_member_join(member):
     
     # Mandamos la data a la funcion de DB Ops que la agrega a la base
     await agregarusuario(username, user_id)
-
-
 
 
 @bot.event
@@ -192,7 +190,7 @@ async def on_reaction_add(reaction, user):
             cursor.execute(SQLkarmagiven, (user.id,))
             await reaction.message.channel.send(f"-1 karma para {str(reaction.message.author)}")
 
-    # Reaccion de Quote + agrega quote a la DB
+    # Reaccion de Quote y agrega quote a la DB
     if "qadd" in str(reaction):
         SQLbuscar = ("SELECT quote FROM quotes WHERE quote = ? AND username = ?")
         cursorquotes.execute(SQLbuscar, (str(reaction.message.content), str(reaction.message.author)))
@@ -253,7 +251,7 @@ async def on_reaction_remove(reaction, user):
             cursor.execute(SQLkarmagiven, (user.id,))
             await reaction.message.channel.send(f"karma-- removido para {str(reaction.message.author)}")
 
-        # Reaccion de Quote + remueve quote de la DB
+        # Reaccion de Quote y remueve quote de la DB
         elif "qadd" in str(reaction):
             print("Quote removido")
             print(f"Message: {reaction.message.content}")
@@ -299,7 +297,7 @@ async def on_message(message):
         botID = 483426239445598240 # <--- Aca va el usr ID del Bridge bot de Discord (Puse el de godlike por ahora para poder probar)
         BridgeBotID = await bot.fetch_user(botID)
 ##################################################################################################################
-# Todo esto se ejecuta cuando el usuario es el bot de bridge (o sea, el mensaje viene bridgeado)
+# Todo esto se ejecuta cuando el usuario es el bot de bridge (o sea, el mensaje viene bridgeado de IRC, Slack, Telegram, etc.)
 
         if message.author == BridgeBotID:
             
@@ -309,7 +307,8 @@ async def on_message(message):
                 if texto.endswith("++") or texto.endswith("--"):
                     palabra_base = texto[:-2]
 
-                    # Buscamos y traemos el username de IRC
+                    # Buscamos y traemos el username externo <--- Esto es asi porque el bot siempre empieza los mensajes con el usuario
+                    # en este formato = "<usuarioexterno> Mensaje publicado al canal." 
                     start_index = message.content.find('<')
                     end_index = message.content.find('>')
                     IRCusername = message.content[start_index + 1:end_index]
@@ -503,15 +502,17 @@ async def on_message(message):
             print(FechaActual)
             print("Mensaje en lower case detectado en canal. Se ejecutara funcion de Yelling")
 
-#Agarra rtas random de un txt y las manda en respuesta al mensaje (para mas humillacion)
+#Agarra frases random de un txt y las manda en respuesta al mensaje (para mas humillacion)
             with open("src/rtasyelling.txt", "r", encoding="utf8") as file: 
                 lines = file.readlines()
             await message.reply(random.choice(lines).strip())
 
-    await bot.process_commands(message) # <-- No tocar esto jamas o rompe los comandos on_message. Siempre dejar al final de la funcion
+    await bot.process_commands(message) # <-- No tocar esto jamas o rompe los comandos on_message. Siempre dejar al final de la funcion on_message
 
 #########################################################################################
 ################### LLAMADAS DE COMANDOS TEXT BASED (USA FUNCION CTX) ###################
+
+# Comandos indivuduales estan en .src/ctxcommands
 
 # COMANDO HELP
 @bot.command()
@@ -611,6 +612,8 @@ async def qsearch(ctx, texto):
 
 #########################################################################################
 ################### LLAMADAS DE COMANDOS SLASH NATIVOS DISCORD (TREE) ###################
+
+# Comandos individuales estan en .src
 
 # COMANDO DOLAR
 @bot.tree.command(name="preciodolar", description="Cotizacion del dolar")

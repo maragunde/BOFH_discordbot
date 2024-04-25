@@ -14,6 +14,6 @@ async def helpfunctx(ctx):
   user = ctx.author
   await ctx.send(mensajeayuda)
   
-#Log
+  # Log
   print(FechaActual)
   print(f"Se ha ejecutado el comando Help")

@@ -22,7 +22,7 @@ async def climafunctx(ctx, city):
         CLIMA_key = os.getenv('WEATHER_key')
         params = {"key": f"{CLIMA_key}","q": city} 
         
-        #Llama a la API y trae la data
+        # Llama a la API y trae la data
         async with aiohttp.ClientSession() as session:
             async with session.get(url, params=params) as res: # <-- Necesitamos la ciudad para checkear el clima en la API
                 data = await res.json()
@@ -40,14 +40,15 @@ async def climafunctx(ctx, city):
                     condition = data["current"]["condition"]["text"]
                     image_url = "http:" + data["current"]["condition"]["icon"]
 
-        # Log
+                    # Log
                     print(FechaActual)
                     print(f"Se ha ejecutado el comando clima")
 
-        #Se crea el embed con los campos del clima
+                    # Se crea el embed con los campos del clima
                     await ctx.send(f'El clima en {location}, {country} es {temp_c} °C, sensación termica {feelslike_c} °C, humedad {humidity} %')
 
     except:
-        #En caso de error en la API, se imprime el mensaje
+        
+        # En caso de error en la API, se imprime el mensaje
         await ctx.send('Error en la API call - avisar a algun root')
         print("Error en la API")

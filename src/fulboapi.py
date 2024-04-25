@@ -7,7 +7,7 @@ from ratelimit import limits
 import os
 from dotenv import load_dotenv
 
-#Funcion principal con la data de la fecha para calcular
+# Funcion principal con la data de la fecha para calcular
 
 load_dotenv()
 quince_minutos = 900
@@ -23,7 +23,7 @@ async def fulboapicall(liga, interaction, emojiliga):
         fechadesde = datetime.date.today() - datetime.timedelta(days=7)
         fechadesde_string = fechadesde.strftime(out_format)
 
-    #Llama a la API - pasamos parametro de la fecha de hoy, y trae siempre los resultados de la ultima semana
+        # Llama a la API - pasamos parametro de la fecha de hoy, y trae siempre los resultados de la ultima semana
         FULBO_token = os.getenv('FULBO_token')
         connection = http.client.HTTPConnection('api.football-data.org')
         headers = { 'X-Auth-Token': f'{FULBO_token}' }
@@ -32,7 +32,7 @@ async def fulboapicall(liga, interaction, emojiliga):
         ligacompleta = response["competition"]["name"]
         partidos = []
 
-        #Recorre el Json para traer los resultados de la ultima fecha   
+        # Recorre el Json para traer los resultados de la ultima fecha   
         for partido in response["matches"]:
             nombrelocal = partido["homeTeam"]["name"]
             nombrevisitante = partido["awayTeam"]["name"]
@@ -47,7 +47,7 @@ async def fulboapicall(liga, interaction, emojiliga):
         print(f"Se ha ejecutado el comando fulbo por {interaction.user}")
         print("Independiente sos amargo")
 
-        #Se crea el embed con la info y se manda a fulbo.py
+        # Se crea el embed con la info y se manda a fulbo.py
         embed = Embed(title=f"Ultimos resultados {ligacompleta} {emojiliga}", description=f"A pedido de {interaction.user}", color = discord.Color.green())
         for i in partidos:
             embed.add_field(name =f"Partido por fecha {i['fecha']}", value =f"{i['nombrelocal']} {i['scorelocal']}   -   {i['scorevisitante']} {i['nombrevisitante']}")         

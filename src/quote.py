@@ -13,7 +13,7 @@ async def quotefunc(interaction):
     databasequotes = sqlite3.connect('db/quotes.db')
     cursorquotes = databasequotes.cursor()
 
-    #Selecciona una quote aleatoria de la DB
+    # Selecciona una quote aleatoria de la DB
     SQLcount = ("SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1")
     cursorquotes.execute(SQLcount)
     historicquote = cursorquotes.fetchone()
@@ -27,7 +27,7 @@ async def quotefunc(interaction):
     embed.add_field(name="Quote historica de Sysarmy", value=f"{historicquote[0]} - by {historicquote[1]} - Date: {date_str}", inline=False)
 
 
-    #Log
+    # Log
     print(FechaActual)
     print(f"Comando /quote ejecutado por {interaction.user}")
 
@@ -44,12 +44,12 @@ async def qsearchfunc(interaction, texto):
     databasequotes = sqlite3.connect('db/quotes.db')
     cursorbusqueda = databasequotes.cursor()
 
-    #Selecciona una quote de la DB en base a texto (ambos campos de usuario o de quote)
+    # Selecciona una quote de la DB en base a texto (ambos campos de usuario o de quote)
     SQLbuscaquote = ("SELECT * FROM quotes WHERE quote LIKE ? OR username LIKE ?")
     cursorbusqueda.execute(SQLbuscaquote, ('%' + texto + '%', '%' + texto + '%'))
     quotesencontrados = cursorbusqueda.fetchall()
 
-    #Si el texto no se encuentra quoteado, devuelve la respuesta
+    # Si el texto no se encuentra quoteado, devuelve la respuesta
     if len(quotesencontrados) == 0:
         embed = Embed(title=f"Quote historica cortesia de by {interaction.user}", description=f"{str(len(quotesencontrados))} quotes encontradas para {texto}", color = discord.Color.green())
         embed.set_thumbnail(url="https://pbs.twimg.com/profile_images/1356823152391843844/_Eooxcxc_400x400.png")
@@ -65,6 +65,7 @@ async def qsearchfunc(interaction, texto):
         embed.set_thumbnail(url="https://pbs.twimg.com/profile_images/1356823152391843844/_Eooxcxc_400x400.png")
         for i, quote in enumerate(quotesencontrados[:4], start=1):
             embed.add_field(name=f"Quote de {quote[1]} - Fecha: {quote[2][0:10]}", value =f"{quote[0]}", inline=False)
+            
             # Limita la cantidad de quotes a 4
             if i == 4:
                 break

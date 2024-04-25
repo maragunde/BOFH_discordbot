@@ -68,6 +68,7 @@ async def subtefunctx(ctx):
                     await ctx.send(mensaje)
                 
     except Exception as e:
+        
         # En caso de error en la API, se imprime el mensaje y se crea el embed con la respuesta
         await ctx.send("Error en la API. Avisar a algun root")
         print("Error en la API:", str(e))

@@ -10,11 +10,13 @@ quince_minutos = 900
 @limits(calls=15, period=quince_minutos)
 async def feriadoclfunctx(ctx):
     today = datetime.date.today()
-    #Llama a la API
+    
+    # Llama a la API
     response = requests.get("https://date.nager.at/api/v3/PublicHolidays/2024/CL")
     try:
         if response.status_code == 200:
-            #Carga el JSON en Python dictionaro
+          
+            # Carga el JSON en Python dictionaro
             json_feriado = json.loads(response.text)          
             feriadosAR = response.json()
             dicferiados = []
@@ -26,15 +28,15 @@ async def feriadoclfunctx(ctx):
                 feriado = {"nombre": nombre, "fecha": fecha}
                 dicferiados.append(feriado)
             
-        #Compara fecha de los feriados con la actual para devolver solo las fechas que se vienen
+            # Compara fecha de los feriados con la actual para devolver solo las fechas que se vienen
             proximos_feriados = [feriado for feriado in dicferiados if feriado['fecha'] >= today] 
 
-        # Log
+            # Log
             FechaActual = datetime.datetime.now()
             print(FechaActual)
             print(f"Comando FeriadoCL ejecutado")
             
-            #Se crea el mensaje con los feriados
+            # Se crea el mensaje con los feriados
             message = "Próximos feriados en Chile:\n"
             
             for feriado in proximos_feriados[:3]:
@@ -45,7 +47,8 @@ async def feriadoclfunctx(ctx):
         else:
             print(f"Error: {response.status_code}. Pincho la API.")
             print(f"Error en la API {response.status_code}")
-            #En caso de error en la API, se imprime el mensaje
+            
+            # En caso de error en la API, se imprime el mensaje
             await ctx.send('Error en la API. Por favor avisar a algun root')
     
     except Exception as e:

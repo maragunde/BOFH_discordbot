@@ -15,18 +15,19 @@ async def criptofunctx(ctx):
     FechaActual = datetime.now()
   
     try:
-        #Llama a la API
+        # Llama a la API
         COIN_key = os.getenv('COIN_key')
 
         url = 'https://api.coinranking.com/v2/coins'
         response = requests.get(url, headers={'Authorization': f'Bearer {COIN_key}'})
             
         if response.status_code == 200:
-            #Carga el JSON en Python dictionaro
+           
+            # Carga el JSON en Python dictionaro
             json_cripto = json.loads(response.text)          
             preciomoneda = []
                     
-            #Recorre el JSON y trate la info de las monedas que elegimos. Appendea en una lista para mostrar
+            # Recorre el JSON y trate la info de las monedas que elegimos. Appendea en una lista para mostrar
             for coin in json_cripto['data']['coins']:
                 if coin['symbol'] in ["BTC", "ETH", "LTC", "USDT", "SHIB", "DOGE", "SOL", "BSV", "BCH"]:
                     nombre = coin["name"],
@@ -39,8 +40,7 @@ async def criptofunctx(ctx):
             print(FechaActual)
             print(f"Se ha ejecutado el comando cripto")
 
-            #Se crea el mensaje ctx para mandar
-
+            # Se crea el mensaje ctx para mandar
             mensaje = 'La timba! 🚀 🌕\n'
             for moneda in preciomoneda:
                 mensaje += f"{moneda['nombre'][0]} -  ({moneda['simbolo'][0]}) USD = {round(float(moneda['precio'][0]),3)}\n"

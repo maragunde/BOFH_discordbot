@@ -15,7 +15,8 @@ async def SubteBA(interaction):
     FechaActual = datetime.now()
     
     try:
-        #Llama a la API y trae la data
+     
+        # Llama a la API y trae la data
         SUBTE_clientID = os.getenv('SUBTE_clientID')
         SUBTE_clientSecret = os.getenv('SUBTE_clientSecret')
         url = f"https://apitransporte.buenosaires.gob.ar/subtes/serviceAlerts?client_id={SUBTE_clientID}&client_secret={SUBTE_clientSecret}&json=1"
@@ -28,7 +29,7 @@ async def SubteBA(interaction):
                     print(FechaActual)
                     print(f"Se ha ejecutado el comando subteBA por {interaction.user}")
 
-        #La API solo manda entity si hay disrupcion en el servicio en la linea. Sino, no manda nada. Aca chequeamos eso. Por default el servicio esta OK (oh, the irony), a menos que encontremos entity de la linea.
+ # La API solo manda entity si hay disrupcion en el servicio en la linea. Sino, no manda nada. Aca chequeamos eso. Por default el servicio esta OK (oh, the irony), a menos que encontremos entity de la linea.
                     errores = []
                     error = data["entity"]
                     i = 0
@@ -37,7 +38,7 @@ async def SubteBA(interaction):
                         errores.append([error[i]['id'],[error[i]['alert']['header_text']['translation'][0]['text']]])
                         i+=1
                     
-                    #Se crea el embed con la respuesta
+                    # Se crea el embed con la respuesta
                     embed = Embed(title="Estado del subte", description=f"A pedido de {interaction.user}", color = discord.Color.green())
                     embed.set_thumbnail(url="https://cdn.civitatis.com/argentina/buenos-aires/galeria/mapa-subte-buenos-aires.png")
                     embed.add_field(name = "🟢 Linea A", value ="Funciona con normalidad",inline=False)
@@ -62,7 +63,7 @@ async def SubteBA(interaction):
                     return embed
                 
     except:
-        #En caso de error en la API, se imprime el mensaje y se crea el embed con la respuesta
+        # En caso de error en la API, se imprime el mensaje y se crea el embed con la respuesta
         embed = Embed(title=f"Error en la API", description=f"Se ha producido un error", color = discord.Color.green())   
         embed.add_field(name = "Error", value =f"Avisar a algun root",inline=True)
         print("Error en la API")
