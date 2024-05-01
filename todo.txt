@@ -1,8 +1,3 @@
-IMPROVEMENT LIST
-* Calcular conversion de moneda con !dolar 5000 o !pesos 5000  + crear comando pesos para ctx y para slash
-
-
------------------------
 TO DO
 
 * beta test

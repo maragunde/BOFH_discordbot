@@ -17,6 +17,7 @@ from src.Clima import climafun
 from src.cripto import criptofun
 from src.dolar import dolarfun
 from src.euro import eurofun
+from src.pesos import pesosfunc
 from src.feriadoAR import feriadoARfun
 from src.feriadoCL import feriadoCLfun
 from src.feriadoES import feriadoESfun
@@ -31,6 +32,7 @@ from src.ctxcommands.ctxclima import climafunctx
 from src.ctxcommands.ctxcripto import criptofunctx
 from src.ctxcommands.ctxdolar import dolarfunctx
 from src.ctxcommands.ctxeuro import eurofunctx
+from src.ctxcommands.ctxpesos import pesosfunctx
 from src.ctxcommands.ctxferiadoar import feriadoarfunctx
 from src.ctxcommands.ctxferiadocl import feriadoclfunctx
 from src.ctxcommands.ctxferiadomx import feriadomxfunctx
@@ -560,6 +562,11 @@ async def fulbo(ctx, liga):
 async def dolar(ctx):
     await dolarfunctx(ctx)
 
+# COMANDO PESOS
+@bot.command()
+async def pesos(ctx, monto:int):
+    await pesosfunctx(ctx, monto)
+
 # COMANDO FERIADOS
 @bot.command()
 async def feriadoar(ctx):
@@ -650,6 +657,15 @@ async def preciodolar(interaction: Interaction):
 async def precioeuro(interaction: Interaction):
     try:
         await interaction.response.send_message(embed= await eurofun(interaction))
+    except:
+        print(f"Limite de API calls excedido. Ultimo call hecho por {interaction.user}")
+        await interaction.response.send_message("Comando /euro: Limite de API calls excedido. Sori el CTO no nos dio budget.")
+
+# COMANDO PESOS
+@bot.tree.command(name="pesos", description="Calcula pesos a dolares")
+async def pesosausd(interaction: Interaction, monto:int):
+    try:
+        await interaction.response.send_message(embed= await pesosfunc(interaction, monto))
     except:
         print(f"Limite de API calls excedido. Ultimo call hecho por {interaction.user}")
         await interaction.response.send_message("Comando /euro: Limite de API calls excedido. Sori el CTO no nos dio budget.")
