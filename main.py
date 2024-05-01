@@ -280,7 +280,7 @@ async def on_command_error(ctx, error):
                         !dolar !cripto !euro !fulbo !clima !subte !underground !feriadoAR !feriadoCL !feriadoES !feriadoMX !feriadoUY !q !qsearch !qadd !rank !kgivers !kgiven !karma
                         Mas detalles en el canal #help-bot-commands de Discord, dentro de la seccion de Welcome! - o ejecutando /help desde Discord"""
 
-# Custom error handling: si !help se manda vacio sin especificar comando, manda un mensaje de ayuda general
+# Custom error handling - si !help se manda vacio sin especificar comando, manda un mensaje de ayuda general
     if isinstance(error, commands.MissingRequiredArgument):
         if ctx.command.name == "help":
             await ctx.send(mensajeayuda_general)

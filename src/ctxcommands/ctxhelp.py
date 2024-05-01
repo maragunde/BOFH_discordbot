@@ -42,7 +42,7 @@ async def helpfunctx(ctx, texto):
         await ctx.send("Pone !dolar y te da los precios de la timba. No requiere argumentos")
 
     elif texto == "feriado" or "feriadoar" or "feriadomx" or "feriadoes" or "feriadocl" or "feriadouy":
-      await ctx.send("Pone !feriadouy !feriadoar !feriadocl !feriadoes !feriadomx y te da los proximos feriados. No requiere argumentos")   
+      await ctx.send("Pone !feriadouy !feriadoar !feriadocl !feriadoes !feriadomx y te da los proximos feriados para el pais seleccionado. No requiere argumentos")   
 
     elif texto == "euro":
       await ctx.send("Pone !euro y te da los precios de la timba. No requiere argumentos")
