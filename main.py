@@ -270,11 +270,32 @@ async def on_reaction_remove(reaction, user):
 
 # Funcion de manejo de error cuando el argumento es None
 # (usuario manda el comando sin parametros requeridos, como por ejemplo en !clima o !fulbo)
+# Excepto para !help que tiene su propio mensaje si el comando va vacio
 
 @bot.event
 async def on_command_error(ctx, error):
+    FechaActual = datetime.now()
+
+    mensajeayuda_general = """Informacion general sobre los comandos del bot de Sysarmy       
+                        !dolar !cripto !euro !fulbo !clima !subte !underground !feriadoAR !feriadoCL !feriadoES !feriadoMX !feriadoUY !q !qsearch !qadd !rank !kgivers !kgiven !karma
+                        Mas detalles en el canal #help-bot-commands de Discord, dentro de la seccion de Welcome! - o ejecutando /help desde Discord"""
+
+# Custom error handling: si !help se manda vacio sin especificar comando, manda un mensaje de ayuda general
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send("Error en el comando. No pasaste arugmentos.")
+        if ctx.command.name == "help":
+            await ctx.send(mensajeayuda_general)
+
+            # Log
+            print(FechaActual)
+            print ("Se ha ejecutado el comando !help")
+
+        else:
+            await ctx.send("Error en el comando. No pasaste argumentos.")
+    elif isinstance(error, commands.CommandNotFound):
+        await ctx.send("Comando inexistente")
+    else:
+        await ctx.send("Error en el comando. No pasaste argumentos.")
+
 
 ##################################################################################################################
 ############################# FUNCION DE ON_MESSAGE PARA KARMA ++ y -- ###########################################
@@ -516,8 +537,8 @@ async def on_message(message):
 
 # COMANDO HELP
 @bot.command()
-async def help(ctx):
-    await helpfunctx(ctx)
+async def help(ctx, texto):
+    await helpfunctx(ctx, texto)
 
 # COMANDO CLIMA   
 @bot.command()

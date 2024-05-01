@@ -8,4 +8,11 @@ from datetime import datetime
 
 async def helpfunc(interaction):
   FechaActual = datetime.now()
+
+
+  # Log
+  print(FechaActual)
+  print("Se ha ejecutado el comando /help")
+
+
   await interaction.response.send_message("Si necesitas ayuda, todos los detalles de como usar el bot estan en el canal #help-bot-commands", ephemeral=True)
