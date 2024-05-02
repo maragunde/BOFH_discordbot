@@ -40,10 +40,10 @@ async def pesosfunc(interaction, monto):
                 dolaresconvertidos.append({"nombre": nombre, "montoendolares": montoendolares})
 
             # Se manda el embed
-            embed = Embed(title=f"Conversion de Pesos a Dolares 💸", description=f"Pesos a calcular: {monto}", color=discord.Color.green())
+            embed = Embed(title=f"Conversion de Pesos a Dolares 💸", description=f"Pesos a calcular: ${monto}", color=discord.Color.green())
             embed.set_thumbnail(url="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/US_one_dollar_bill%2C_obverse%2C_series_2009.jpg/1200px-US_one_dollar_bill%2C_obverse%2C_series_2009.jpg")
             for conversion in dolaresconvertidos:
-                embed.add_field(name=conversion['nombre'], value=f"Dolares: {conversion['montoendolares']:.2f}", inline=False)
+                embed.add_field(name=conversion['nombre'], value=f"{conversion['montoendolares']:.2f} USD", inline=False)
             
             return embed
         else:

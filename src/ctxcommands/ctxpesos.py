@@ -42,7 +42,7 @@ async def pesosfunctx(ctx, monto):
              # Se crea el mensaje ctx para mandar
             mensaje = f'Calculo de {monto} pesos a USD 💸\n'
             for conversion in dolaresconvertidos:
-                mensaje += f"{conversion['nombre']} --> Compra = {conversion['montoendolares']:.2f}\n"
+                mensaje += f"{conversion['nombre']}  = {conversion['montoendolares']:.2f} USD\n"
 
             await ctx.send(mensaje)        
     
