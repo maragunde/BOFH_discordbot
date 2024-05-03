@@ -40,6 +40,7 @@ aiohttp
 ratelimit
 json
 requests
+ics
 
 ---
 **FUNCIONAMIENTO DE COMANDOS**
