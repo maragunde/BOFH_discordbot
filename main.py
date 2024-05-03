@@ -23,6 +23,7 @@ from src.feriadoCL import feriadoCLfun
 from src.feriadoES import feriadoESfun
 from src.feriadoMX import feriadoMXfun
 from src.feriadoUY import feriadoUYfun
+from src.birras import birrasfunc
 from src.karma import karmagiversfunc, karmarankfunc, karmauserfunc
 from src.help import helpfunc
 from src.quote import quotefunc, qsearchfunc
@@ -38,6 +39,7 @@ from src.ctxcommands.ctxferiadocl import feriadoclfunctx
 from src.ctxcommands.ctxferiadomx import feriadomxfunctx
 from src.ctxcommands.ctxferiadouy import feriadouyfunctx
 from src.ctxcommands.ctxferiadoes import feriadoesfunctx
+from src.ctxcommands.ctxbirras import birrasfunctx
 from src.ctxcommands.ctxfulbo import fulbofunctx
 from src.ctxcommands.ctxhelp import helpfunctx
 from src.ctxcommands.ctxkarma import karmarankfunctx, karmawordfunctx, karmagiversfunctx, karmagiversuserfunctx
@@ -638,6 +640,11 @@ async def q(ctx):
 async def qsearch(ctx, texto):
     await qsearchfunctx(ctx, texto)
 
+# COMANDO BIRRAS
+@bot.command()
+async def birras(ctx):
+    await birrasfunctx(ctx)
+
 #########################################################################################
 ################### LLAMADAS DE COMANDOS SLASH NATIVOS DISCORD (TREE) ###################
 
@@ -791,6 +798,11 @@ async def quoterandom(interaction: Interaction):
 @bot.tree.command(name="qsearch", description="Busca un Quote en base a texto")
 async def quotesearch(interaction: Interaction, texto:str):
     await interaction.response.send_message(embed= await qsearchfunc(interaction, texto))
+
+# COMANDO BIRRAS
+@bot.tree.command(name="birrassysarmy", description="Proximas birras / eventos de Sysarmy")
+async def birras(interaction: Interaction):
+    await interaction.response.send_message(embed= await birrasfunc(interaction))
 
 if __name__ == '__main__':
     main()

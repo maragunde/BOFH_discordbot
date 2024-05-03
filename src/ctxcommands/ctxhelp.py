@@ -10,7 +10,7 @@ async def helpfunctx(ctx, texto):
     if texto is None:
         
         mensajeayuda_general = """Informacion general sobre los comandos del bot de Sysarmy       
-                          !dolar !cripto !euro !fulbo !pesos !clima !subte !underground !feriadoAR !feriadoCL !feriadoES !feriadoMX !feriadoUY !q !qsearch !qadd !rank !kgivers !kgiven !karma
+                          !dolar !cripto !euro !fulbo !pesos !clima !subte !underground !feriadoAR !feriadoCL !feriadoES !feriadoMX !feriadoUY !q !qsearch !qadd !rank !kgivers !kgiven !karma !birras
                           Mas detalles en el canal #help-bot-commands de Discord, dentro de la seccion de Welcome! - o ejecutando /help desde Discord"""
         await ctx.send(mensajeayuda_general)
    
@@ -58,6 +58,9 @@ async def helpfunctx(ctx, texto):
 
     elif texto == "pesos":
       await ctx.send("Pone !pesos y el monto para que te calcule el precio en USD. Ej: '!pesos 10000'")
+
+    elif texto == "birras":
+      await ctx.send("Pone !birras para consultar las proximas birras / eventos en el Google Calendar publico de Sysarmy. NO requiere argumentos")
 
     # Log
     print(FechaActual)
