@@ -520,7 +520,7 @@ async def on_message(message):
 ################### FUNCION DE ON_MESSAGE PARA YELLING ###################
 
 #Lee el canal de Yelling
-    if message.channel.id == 1209436952969879562: 
+    if message.channel.id == 1238157304088760350: 
 
 #Chequeea por lowercase. Putea solo con haber un solo caracter en lowercase. No jodan.
         if any(char.islower() for char in message.content): 
