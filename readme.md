@@ -29,18 +29,9 @@ Ademas usamos SQLite para guardar todos los usuarios del server y manejar puntaj
 ---
 **DEPENDENCIAS Y LIBRERIAS**
 
-dotenv
-discord
-discord.ext
-discord.ui
-random
-sqlite3
-datetime
-aiohttp
-ratelimit
-json
-requests
-ics
+Check requirements.txt
+
+`pip install -r requirements.txt`
 
 ---
 **FUNCIONAMIENTO DE COMANDOS**
