@@ -1,7 +1,6 @@
 TO DO
-* Incluir comando !birra para eventos? hay que pullear de meetup? Preguntarle a Nachi cuando vuelva como anda el adminbirrator
-
 
 * beta test
-* merge DB de karma y quotes actual?
+* merge DB de karma y quotes actual
 * hosting
+* announcement / public repo

@@ -8,7 +8,7 @@ quince_minutos = 900
 
 # Limitamos las API calls por las dudas. Esta libreria es medio negra. Lo dejamos asi por ahora, Mariano del futuro lo va a hacer manual
 @limits(calls=15, period=quince_minutos)
-async def dolarfunctx(ctx):
+async def dolarfunctx(ctx, inputpesos):
 
     FechaActual = datetime.now()
 
@@ -35,12 +35,24 @@ async def dolarfunctx(ctx):
                 dolar = {"nombre": nombre, "preciocompra": preciocompra, "precioventa": precioventa}
                 dolares.append(dolar)
 
-            # Se crea el mensaje ctx para mandar
-            mensaje = 'El precio del dolar 💸\n'
-            for dolar in dolares:
-                mensaje += f"{dolar['nombre']} --> Compra = {dolar['preciocompra']}   |   Venta = {dolar['precioventa']}\n"
+                if inputpesos is None: # <-- Si el usuario solo ejecuta !pesos sin especificar un monto
 
-            await ctx.send(mensaje)        
+                    # Se crea el mensaje ctx para mandar
+                    mensaje = 'El precio del dolar 💸\n'
+                    for dolar in dolares:
+                        mensaje += f"{dolar['nombre']} --> Compra = {dolar['preciocompra']}   |   Venta = {dolar['precioventa']}\n"
+
+                    await ctx.send(mensaje)
+                
+                else:
+                    # Se crea el mensaje ctx para mandar por el monto especificado
+                    mensaje = f"El precio del dolar 💸 para ${inputpesos} pesos\n"
+                    for dolar in dolares:
+                        mensaje += f"{dolar['nombre']} --> Compra = {inputpesos * dolar['preciocompra']}\n"
+
+                    await ctx.send(mensaje)
+                
+
     
     except Exception as e:
         print(f"Error en la API: {e}")

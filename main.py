@@ -288,6 +288,9 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         if ctx.command.name == "help":
             await ctx.send(mensajeayuda_general)
+        
+        elif ctx.command.name == "dolar":
+            await dolarfunctx(ctx, None)
 
             # Log
             print(FechaActual)
@@ -561,8 +564,8 @@ async def fulbo(ctx, liga):
 
 # COMANDO DOLAR
 @bot.command()
-async def dolar(ctx):
-    await dolarfunctx(ctx)
+async def dolar(ctx, inputpesos):
+    await dolarfunctx(ctx, inputpesos)
 
 # COMANDO PESOS
 @bot.command()
