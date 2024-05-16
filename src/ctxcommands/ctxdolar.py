@@ -35,22 +35,23 @@ async def dolarfunctx(ctx, inputpesos):
                 dolar = {"nombre": nombre, "preciocompra": preciocompra, "precioventa": precioventa}
                 dolares.append(dolar)
 
-                if inputpesos is None:
+            if inputpesos is None:
 
-                    # Se crea el mensaje ctx para mandar
-                    mensaje = 'El precio del dolar 💸\n'
-                    for dolar in dolares:
-                        mensaje += f"{dolar['nombre']} --> Compra = {dolar['preciocompra']}   |   Venta = {dolar['precioventa']}\n"
+            # Se crea el mensaje ctx para mandar
+                mensaje = 'El precio del dolar 💸\n'
+            for dolar in dolares:
+                mensaje += f"{dolar['nombre']} --> Compra = {dolar['preciocompra']}   |   Venta = {dolar['precioventa']}\n"
+
+                await ctx.send(mensaje)
+
+            else:
+                # Se crea el mensaje ctx para mandar con el input del usuario
+                mensaje = 'El precio del dolar 💸\n'
+                for dolar in dolares:
+                    mensaje += f"{inputpesos * dolar['nombre']} --> Compra = {dolar['preciocompra']}\n"
 
                     await ctx.send(mensaje)
 
-                else:
-                    # Se crea el mensaje ctx para mandar con el input del usuario
-                    mensaje = 'El precio del dolar 💸\n'
-                    for dolar in dolares:
-                        mensaje += f"{inputpesos * dolar['nombre']} --> Compra = {dolar['preciocompra']}\n"
-
-                await ctx.send(mensaje)
     except Exception as e:
         print(f"Error en la API: {e}")
         await ctx.send(f"Error. Pincho la API. Error {response.status_code}")
