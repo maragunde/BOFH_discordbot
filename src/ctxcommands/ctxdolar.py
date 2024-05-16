@@ -26,25 +26,34 @@ async def dolarfunctx(ctx, inputpesos):
             # Log
             print(FechaActual)
             print(f"Se ha ejecutado el comando dolar")
-            
-            # Trae datos del precio del dolar para meter en el embed 
-            for casa in preciosdolares:
-                nombre = casa["nombre"]
-                preciocompra = casa["compra"]
-                precioventa = casa["venta"]
-                dolar = {"nombre": nombre, "preciocompra": preciocompra, "precioventa": precioventa}
-                dolares.append(dolar)
 
             if inputpesos is None:
+            
+                # Trae datos del precio del dolar para meter en el embed 
+                for casa in preciosdolares:
+                    nombre = casa["nombre"]
+                    preciocompra = casa["compra"]
+                    precioventa = casa["venta"]
+                    dolar = {"nombre": nombre, "preciocompra": preciocompra, "precioventa": precioventa}
+                    dolares.append(dolar)
 
-            # Se crea el mensaje ctx para mandar
+                # Se crea el mensaje ctx para mandar
                 mensaje = 'El precio del dolar 💸\n'
-            for dolar in dolares:
-                mensaje += f"{dolar['nombre']} --> Compra = {dolar['preciocompra']}   |   Venta = {dolar['precioventa']}\n"
+                for dolar in dolares:
+                    mensaje += f"{dolar['nombre']} --> Compra = {dolar['preciocompra']}   |   Venta = {dolar['precioventa']}\n"
 
                 await ctx.send(mensaje)
 
             else:
+
+                 # Trae datos del precio del dolar para meter en el embed 
+                for casa in preciosdolares:
+                    nombre = casa["nombre"]
+                    preciocompra = casa["compra"]
+                    precioventa = casa["venta"]
+                    dolar = {"nombre": nombre, "preciocompra": preciocompra, "precioventa": precioventa}
+                    dolares.append(dolar)
+               
                 # Se crea el mensaje ctx para mandar con el input del usuario
                 mensaje = 'El precio del dolar 💸\n'
                 for dolar in dolares:
