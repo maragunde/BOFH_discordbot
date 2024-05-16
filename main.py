@@ -394,6 +394,7 @@ async def on_message(message):
                     else:
                         # Insert word en la DB para karma++ y se imprime confirmacion
                         if texto.endswith("++"):
+                            palabra_base = texto.replace("+","")
                             initial_karma = 1 # <-- Como es una nueva palabra y es ++, el karma inicial siempe es de 1
                             cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, ?, 'NO', ?)", (palabra_base, initial_karma, 0))
                             databasekarma.commit()
@@ -422,6 +423,7 @@ async def on_message(message):
                         
                         # Insert palabra en la DB para karma-- y se imprime confirmacion
                         elif texto.endswith("--"):
+                            palabra_base = texto.replace("-","")
                             initial_karma = -1 ## <-- Como es una nueva palabra y es --, el karma inicial siempe es de -1
                             cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, ?, 'NO', ?)", (palabra_base, initial_karma, 0))
                             databasekarma.commit()
@@ -487,6 +489,7 @@ async def on_message(message):
                     else:
                         # Insert palabra en la DB para karma++
                         if texto.endswith("++"):
+                            palabra_base = texto.replace("+","")
                             initial_karma = 1
                             cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, ?, 'NO', ?)", (palabra_base, initial_karma, 0))
                             databasekarma.commit()
@@ -506,6 +509,7 @@ async def on_message(message):
                         
                         # Insert palabra en la DB para karma--
                         elif texto.endswith("--"):
+                            palabra_base = texto.replace("-","")
                             initial_karma = -1
                             cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, ?, 'NO', ?)", (palabra_base, initial_karma, 0))
                             databasekarma.commit()
