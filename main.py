@@ -288,13 +288,17 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         if ctx.command.name == "help":
             await ctx.send(mensajeayuda_general)
-        
-        elif ctx.command.name == "dolar":
-            await dolarfunctx(ctx, None)
 
             # Log
             print(FechaActual)
             print ("Se ha ejecutado el comando !help")
+        
+        elif ctx.command.name == "dolar":
+
+            await dolarfunctx(ctx, None)
+            # Log
+            print(FechaActual)
+            print ("Se ha ejecutado el comando !dolar")
 
         else:
             await ctx.send("Error en el comando. No pasaste argumentos.")
@@ -333,7 +337,7 @@ async def on_message(message):
             textokarma = message.content.split()
             for texto in textokarma:
                 if texto.endswith("++") or texto.endswith("--"):
-                    palabra_base = texto[:-2]
+                    palabra_base = texto.replace[:-2]
 
                     # Buscamos y traemos el username externo <--- Esto es asi porque el bot siempre empieza los mensajes con el usuario
                     # en este formato = "<usuarioexterno> Mensaje publicado al canal." 
@@ -394,7 +398,6 @@ async def on_message(message):
                     else:
                         # Insert word en la DB para karma++ y se imprime confirmacion
                         if texto.endswith("++"):
-                            palabra_base = texto.replace("+","")
                             initial_karma = 1 # <-- Como es una nueva palabra y es ++, el karma inicial siempe es de 1
                             cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, ?, 'NO', ?)", (palabra_base, initial_karma, 0))
                             databasekarma.commit()
@@ -423,7 +426,6 @@ async def on_message(message):
                         
                         # Insert palabra en la DB para karma-- y se imprime confirmacion
                         elif texto.endswith("--"):
-                            palabra_base = texto.replace("-","")
                             initial_karma = -1 ## <-- Como es una nueva palabra y es --, el karma inicial siempe es de -1
                             cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, ?, 'NO', ?)", (palabra_base, initial_karma, 0))
                             databasekarma.commit()
@@ -489,7 +491,6 @@ async def on_message(message):
                     else:
                         # Insert palabra en la DB para karma++
                         if texto.endswith("++"):
-                            palabra_base = texto.replace("+","")
                             initial_karma = 1
                             cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, ?, 'NO', ?)", (palabra_base, initial_karma, 0))
                             databasekarma.commit()
@@ -509,7 +510,6 @@ async def on_message(message):
                         
                         # Insert palabra en la DB para karma--
                         elif texto.endswith("--"):
-                            palabra_base = texto.replace("-","")
                             initial_karma = -1
                             cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, ?, 'NO', ?)", (palabra_base, initial_karma, 0))
                             databasekarma.commit()
