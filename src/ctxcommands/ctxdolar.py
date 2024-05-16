@@ -11,6 +11,7 @@ quince_minutos = 900
 async def dolarfunctx(ctx, inputpesos):
 
     FechaActual = datetime.now()
+    print(inputpesos)
 
     try:
         # Llama a la API
