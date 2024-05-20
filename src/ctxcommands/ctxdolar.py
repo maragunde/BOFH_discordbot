@@ -11,13 +11,8 @@ quince_minutos = 900
 async def dolarfunctx(ctx, inputpesos):
 
     FechaActual = datetime.now()
-    print(inputpesos)
 
     try:
-
-        # Convierte inputpesos para calcular
-        
-
         # Llama a la API
         response = requests.get("https://dolarapi.com/v1/dolares")
 
@@ -63,7 +58,6 @@ async def dolarfunctx(ctx, inputpesos):
                 mensaje = 'El precio del dolar 💸\n'
                 for dolar in dolares:
                     mensaje += f"{dolar['nombre']} --> Compra = ${inputpesos * float(dolar['preciocompra'])}\n"
-
                     
                 await ctx.send(mensaje)
 
