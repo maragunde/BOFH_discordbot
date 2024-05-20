@@ -16,7 +16,7 @@ async def dolarfunctx(ctx, inputpesos):
     try:
 
         # Convierte inputpesos para calcular
-        inputpesos = int(inputpesos)
+        
 
         # Llama a la API
         response = requests.get("https://dolarapi.com/v1/dolares")
@@ -50,7 +50,7 @@ async def dolarfunctx(ctx, inputpesos):
                 await ctx.send(mensaje)
 
             else:
-
+                inputpesos = float(inputpesos)
                  # Trae datos del precio del dolar para meter en el embed 
                 for casa in preciosdolares:
                     nombre = casa["nombre"]
@@ -62,9 +62,10 @@ async def dolarfunctx(ctx, inputpesos):
                 # Se crea el mensaje ctx para mandar con el input del usuario
                 mensaje = 'El precio del dolar 💸\n'
                 for dolar in dolares:
-                    mensaje += f"{inputpesos * dolar['nombre']} --> Compra = {dolar['preciocompra']}\n"
+                    mensaje += f"{dolar['nombre']} --> Compra = ${inputpesos * float(dolar['preciocompra'])}\n"
 
-                    await ctx.send(mensaje)
+                    
+                await ctx.send(mensaje)
 
     except Exception as e:
         print(f"Error en la API: {e}")
