@@ -337,18 +337,8 @@ async def on_message(message):
             textokarma = message.content.split()
             for texto in textokarma:
                 if texto.endswith("++") or texto.endswith("--"):
-                    
-                    # Limpiamos la palabra de cualquier ++ o -- que traiga en el texto
-                    signos_a_reemplazar = ""
-
-                    for c in reversed(texto):
-                        if c != "+" or c != "-":
-                                break
-                        else:
-                            signos_a_reemplazar = signos_a_reemplazar + c
-
-                    palabra_base = texto.replace(signos_a_reemplazar, "")
-                    print(palabra_base)
+          
+                    palabra_base = texto[:-2]
 
                     # Buscamos y traemos el username externo <--- Esto es asi porque el bot siempre empieza los mensajes con el usuario
                     # en este formato = "<usuarioexterno> Mensaje publicado al canal." 
