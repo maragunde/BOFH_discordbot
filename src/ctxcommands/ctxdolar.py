@@ -55,9 +55,10 @@ async def dolarfunctx(ctx, inputpesos):
                     dolares.append(dolar)
                
                 # Se crea el mensaje ctx para mandar con el input del usuario
-                mensaje = 'El precio del dolar 💸\n'
+                mensaje = f"El precio del dolar para ${inputpesos} 💸\n"
                 for dolar in dolares:
-                    mensaje += f"{dolar['nombre']} --> Compra = ${inputpesos * float(dolar['preciocompra'])}\n"
+                    valor_convertido = round(inputpesos * float(dolar['preciocompra']))
+                    mensaje += f"{dolar['nombre']} --> Compra = ${valor_convertido}\n"
                     
                 await ctx.send(mensaje)
 
