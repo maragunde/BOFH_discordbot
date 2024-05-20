@@ -446,17 +446,7 @@ async def on_message(message):
             for texto in textokarma:
                 if texto.endswith("++") or texto.endswith("--"):
 
-                    # Limpiamos la palabra de cualquier ++ o -- que traiga en el texto
-                    signos_a_reemplazar = ""
-
-                    for c in reversed(texto):
-                        if c != "+" or c != "-":
-                                break
-                        else:
-                            signos_a_reemplazar = signos_a_reemplazar + c
-
-                    palabra_base = texto.replace(signos_a_reemplazar, "")
-                    print(palabra_base)
+                    palabra_base = texto[:-2]
 
                     # Ejecuta query para verificar si la palabra y el usuario existen en la DB
                     cursorusers.execute("SELECT * FROM usuarios WHERE username = ?", (message.author.name,))
