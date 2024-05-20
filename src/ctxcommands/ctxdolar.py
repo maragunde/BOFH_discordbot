@@ -14,6 +14,10 @@ async def dolarfunctx(ctx, inputpesos):
     print(inputpesos)
 
     try:
+
+        # Convierte inputpesos para calcular
+        inputpesos = int(inputpesos)
+
         # Llama a la API
         response = requests.get("https://dolarapi.com/v1/dolares")
 

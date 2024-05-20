@@ -326,8 +326,8 @@ async def on_message(message):
     if message.author.bot:
         return
     else:
-        botID = 483426239445598240 # <--- Aca va el usr ID del Bridge bot de Discord (Puse el de godlike por ahora para poder probar)
-        BridgeBotID = await bot.fetch_user(botID)
+        botID = os.getenv('bridgebotID')
+        BridgeBotID = await bot.fetch_user(botID) # <--- Aca va el usr ID del Bridge bot de Discord (Puse el de godlike por ahora para poder probar)
 ##################################################################################################################
 # Todo esto se ejecuta cuando el usuario es el bot de bridge (o sea, el mensaje viene bridgeado de IRC, Slack, Telegram, etc.)
 
@@ -337,7 +337,18 @@ async def on_message(message):
             textokarma = message.content.split()
             for texto in textokarma:
                 if texto.endswith("++") or texto.endswith("--"):
-                    palabra_base = texto.replace[:-2]
+                    
+                    # Limpiamos la palabra de cualquier ++ o -- que traiga en el texto
+                    signos_a_reemplazar = ""
+
+                    for c in reversed(texto):
+                        if c != "+" or c != "-":
+                                break
+                        else:
+                            signos_a_reemplazar = signos_a_reemplazar + c
+
+                    palabra_base = texto.replace(signos_a_reemplazar, "")
+                    print(palabra_base)
 
                     # Buscamos y traemos el username externo <--- Esto es asi porque el bot siempre empieza los mensajes con el usuario
                     # en este formato = "<usuarioexterno> Mensaje publicado al canal." 
@@ -444,12 +455,21 @@ async def on_message(message):
             
             for texto in textokarma:
                 if texto.endswith("++") or texto.endswith("--"):
-                    palabra_base = texto[:-2]
-                    cursorkarma.execute("SELECT * FROM karma WHERE palabra = ?", (palabra_base,))
-                    cursorusers.execute("SELECT * FROM usuarios WHERE username = ?", (message.author.name,))
-                    print(f"Palabra base detectada antes del if de existing workd: {palabra_base}")
 
-                    # Ejecuta query para verificar si la palabra existe en la DB
+                    # Limpiamos la palabra de cualquier ++ o -- que traiga en el texto
+                    signos_a_reemplazar = ""
+
+                    for c in reversed(texto):
+                        if c != "+" or c != "-":
+                                break
+                        else:
+                            signos_a_reemplazar = signos_a_reemplazar + c
+
+                    palabra_base = texto.replace(signos_a_reemplazar, "")
+                    print(palabra_base)
+
+                    # Ejecuta query para verificar si la palabra y el usuario existen en la DB
+                    cursorusers.execute("SELECT * FROM usuarios WHERE username = ?", (message.author.name,))
                     cursorkarma.execute("SELECT * FROM karma WHERE palabra = ?", (palabra_base,))
                     existing_word = cursorkarma.fetchone()
                     
