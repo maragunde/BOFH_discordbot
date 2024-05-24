@@ -1,6 +1,0 @@
-TO DO
-
-* beta test
-* merge DB de karma y quotes actual
-* hosting
-* announcement / public repo
