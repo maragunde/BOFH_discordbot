@@ -79,7 +79,7 @@ async def karmagiversuserfunctx(ctx, text):
     cursor = database.cursor()
     
     # Chequea si la palabra esta en la base
-    SQL_check = "SELECT EXISTS(SELECT 1 FROM karma WHERE palabra = ?)"
+    SQL_check = "SELECT EXISTS(SELECT 1 FROM karma WHERE palabra = ? AND isuser = 'YES')"
     cursor.execute(SQL_check, (text,))
     palabra_existe = cursor.fetchone()[0]
     
@@ -124,7 +124,7 @@ async def karmagiversfunctx(ctx):
     await ctx.send(messageDiscord)
 
    # Campos que necesitamos en la base de karma: Username, y karmagiven, ya presorteados
-    SQLKarma = ("SELECT karmagiven, palabra FROM karma ORDER BY karmagiven DESC LIMIT 5") 
+    SQLKarma = ("SELECT karmagiven, palabra, isuser FROM karma WHERE isuser = 'YES' ORDER BY karmagiven DESC LIMIT 5") 
     cursorctx.execute(SQLKarma)
     rowsctx = cursorctx.fetchall()
     
@@ -142,12 +142,3 @@ async def karmagiversfunctx(ctx):
 
     database.commit()
     database.close()
-
-  
-
-
-
-
-
-
- 

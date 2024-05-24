@@ -789,7 +789,12 @@ async def karmarank(interaction: Interaction):
 # COMANDO KARMA GIVERS
 @bot.tree.command(name="karmagivers", description="Ranking top 5 dadores de karma")
 async def karmagivers(interaction: Interaction):
-    await interaction.response.send_message(embed= await karmagiversfunc(interaction))
+    # Manda el primer embed con givers de discord
+    embed_discord, embed_karma = await karmagiversfunc(interaction)
+    await interaction.response.send_message(embed=embed_discord)
+    
+    # Manda el segundo embed con givers externos
+    await interaction.followup.send(embed=embed_karma)
 
 # COMANDO KARMA USER
 @bot.tree.command(name="karmauser", description="Ver Karma de un usuario")
