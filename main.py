@@ -114,7 +114,8 @@ async def on_member_join(member):
 @bot.event
 async def on_ready():
 
-    # Trae todos los usuarios presentes en el server y lost agrega a la DB - Corre solamente por unica vez cuando se inicia el bot
+    # Trae todos los usuarios presentes en el server y lost agrega a la DB - Corre por unica vez cuando se inicia el bot
+    # Esto lo hacemos para poder sincronizar el karma ranking y karmagiven de Discord desde nuestra DB
     guild_id = os.getenv('guild_id')
     guild = bot.get_guild(int(guild_id))
     all_members = guild.members

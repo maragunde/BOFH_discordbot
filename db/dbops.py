@@ -27,9 +27,12 @@ async def agregarusuario(username, user_id):
 
 # FUNCION ONE TIME ONLY PARA AGREGAR A TODOS LOS USUARIOS A LA DB CUANDIO INICIA EL BOT
 async def sincronizarUsuarios(all_members):
+
+    # Cpmecta a la base
     FechaActual = datetime.now()
     databaseusers = sqlite3.connect('db/discordusrs.db')
     cursor = databaseusers.cursor()
+
     for member in all_members:
         try:
             cursor.execute("INSERT INTO usuarios (username, user_id, karma, karmagiven) VALUES (?, ?, 0, 0)", (member.name, member.id))
@@ -39,6 +42,7 @@ async def sincronizarUsuarios(all_members):
                 f.write(f"{FechaActual} - USER DB FUNCTION: Nuevo ususario agregado {member.name} - {member.id} \n")
 
         except sqlite3.IntegrityError:
+            # Log
             with open('db/dblog.txt', "a") as f:
                 f.write(f"{FechaActual} - USER DB FUNCITON: Error. Usuario ya existe en la base \n")
 
