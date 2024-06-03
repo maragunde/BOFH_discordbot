@@ -3,25 +3,16 @@ from discord import Embed
 import datetime, sqlite3
 from datetime import datetime
 
-
-# Conectamos a la base
-database = sqlite3.connect('db/discordusrs.db')
-cursor = database.cursor()
-
-# Campos que necesitamos en la base: Username, UserId de discord, Karma, y el budget de karma
-SQL = ("SELECT karmabudget, karma, username FROM usuarios") 
-
-
 ################### FUNCION DE RANKING
 async def karmarankfunc(interaction):
     FechaActual = datetime.now()
     
     # Conectamos a la base
-    database = sqlite3.connect('db/discordusrs.db')
+    database = sqlite3.connect('db/karma.db')
     cursor = database.cursor()
     
     # Campos que necesitamos en la base: Username, Uy karma, ya presorteados
-    SQL = ("SELECT karma, username FROM usuarios ORDER BY karma DESC LIMIT 10") 
+    SQL = ("SELECT karmavalue, palabra, isuser FROM karma WHERE isuser = 'YES' ORDER BY karmavalue DESC LIMIT 10") 
 
     cursor.execute(SQL)
     rows = cursor.fetchall()
@@ -65,7 +56,7 @@ async def karmagiversfunc(interaction):
         j += 1
 
     # Campos que necesitamos en la base: palabra, y karmagiven, ya presorteados
-    SQLkarma = ("SELECT karmagiven, palabra FROM karma ORDER BY karmagiven DESC LIMIT 5") 
+    SQLkarma = ("SELECT karmagiven, palabra, isuser FROM karma WHERE isuser = 'YES' ORDER BY karmagiven DESC LIMIT 5") 
     cursorkarma.execute(SQLkarma)
     rowsCTX = cursorkarma.fetchall()
         

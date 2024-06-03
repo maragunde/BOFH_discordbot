@@ -2,15 +2,6 @@ import discord
 import datetime, sqlite3
 from datetime import datetime
 
-
-# Conectamos a la base
-database = sqlite3.connect('db/karma.db')
-cursor = database.cursor()
-
-# Campos que necesitamos en la base: Username, UserId de discord, Karma, y el budget de karma
-SQL = ("SELECT palabra, karmavalue, isuser FROM karma") 
-
-
 ################### FUNCION DE RANKING
 async def karmarankfunctx(ctx):
     FechaActual = datetime.now()
