@@ -130,6 +130,9 @@ ENV/
 env.bak/
 venv.bak/
 
+# DB / Log
+db/dblog.txt
+
 # Spyder project settings
 .spyderproject
 .spyproject

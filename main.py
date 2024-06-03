@@ -4,7 +4,7 @@ from discord import Intents, Client, Message, app_commands, Interaction, Embed, 
 from discord.ext import commands
 import random, sqlite3
 from datetime import datetime
-from db.dbops import agregarusuario
+from db.dbops import agregarusuario, sincronizarUsuarios
 import os
 from dotenv import load_dotenv # <-- Solo para las keys storeadas en venv
 
@@ -113,6 +113,12 @@ async def on_member_join(member):
 
 @bot.event
 async def on_ready():
+
+    # Trae todos los usuarios presentes en el server y lost agrega a la DB - Corre solamente por unica vez cuando se inicia el bot
+    guild_id = os.getenv('guild_id')
+    guild = bot.get_guild(int(guild_id))
+    all_members = guild.members
+    await sincronizarUsuarios(all_members)
 
     # BOFH starts
     FechaActual = datetime.now()
