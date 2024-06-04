@@ -28,7 +28,7 @@ async def agregarusuario(username, user_id):
 # FUNCION ONE TIME ONLY PARA AGREGAR A TODOS LOS USUARIOS A LA DB CUANDIO INICIA EL BOT
 async def sincronizarUsuarios(all_members):
 
-    # Cpmecta a la base
+    # Conecta a la base
     FechaActual = datetime.now()
     databaseusers = sqlite3.connect('db/discordusrs.db')
     cursor = databaseusers.cursor()
