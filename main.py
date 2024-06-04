@@ -659,6 +659,11 @@ async def qsearch(ctx, texto):
 async def birras(ctx):
     await birrasfunctx(ctx)
 
+# COMANDO PING
+@bot.command()
+async def ping(ctx):
+    await ctx.send("Pong!")
+
 #########################################################################################
 ################### LLAMADAS DE COMANDOS SLASH NATIVOS DISCORD (TREE) ###################
 
