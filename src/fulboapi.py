@@ -32,26 +32,40 @@ async def fulboapicall(liga, interaction, emojiliga):
         ligacompleta = response["competition"]["name"]
         partidos = []
 
-        # Recorre el Json para traer los resultados de la ultima fecha   
-        for partido in response["matches"]:
-            nombrelocal = partido["homeTeam"]["name"]
-            nombrevisitante = partido["awayTeam"]["name"]
-            scorelocal = partido["score"]["fullTime"]["home"]
-            scorevisitante = partido["score"]["fullTime"]["away"]
-            fecha = partido["matchday"]
-            partido = {"nombrelocal": nombrelocal, "nombrevisitante": nombrevisitante, "scorelocal": scorelocal, "scorevisitante": scorevisitante, "fecha": fecha}
-            partidos.append(partido)
 
-        # Log
-        print (FechaActual)
-        print(f"Se ha ejecutado el comando fulbo por {interaction.user}")
-        print("Independiente sos amargo")
 
-        # Se crea el embed con la info y se manda a fulbo.py
-        embed = Embed(title=f"Ultimos resultados {ligacompleta} {emojiliga}", description=f"A pedido de {interaction.user}", color = discord.Color.green())
-        for i in partidos:
-            embed.add_field(name =f"Partido por fecha {i['fecha']}", value =f"{i['nombrelocal']} {i['scorelocal']}   -   {i['scorevisitante']} {i['nombrevisitante']}")         
-        return embed
+        # Mensaje en caso de que no haya partidos recientes (response viene vacio)
+        if len(response["matches"]) == 0:
+            print (FechaActual)
+            print(f"Se ha ejecutado el comando fulbo")
+            print("Independiente sos amargo")
+
+             # Se crea el embed con la info y se manda a fulbo.py
+            embed = Embed(title=f"Ultimos resultados {ligacompleta} {emojiliga}", description=f"A pedido de {interaction.user}", color = discord.Color.green())
+            embed.add_field(name =f"Error", value =f"No hay partidos recientes para la liga seleccionada")         
+            return embed
+        else:
+
+            # Recorre el Json para traer los resultados de la ultima fecha   
+            for partido in response["matches"]:
+                nombrelocal = partido["homeTeam"]["name"]
+                nombrevisitante = partido["awayTeam"]["name"]
+                scorelocal = partido["score"]["fullTime"]["home"]
+                scorevisitante = partido["score"]["fullTime"]["away"]
+                fecha = partido["matchday"]
+                partido = {"nombrelocal": nombrelocal, "nombrevisitante": nombrevisitante, "scorelocal": scorelocal, "scorevisitante": scorevisitante, "fecha": fecha}
+                partidos.append(partido)
+
+            # Log
+            print (FechaActual)
+            print(f"Se ha ejecutado el comando fulbo por {interaction.user}")
+            print("Independiente sos amargo")
+
+            # Se crea el embed con la info y se manda a fulbo.py
+            embed = Embed(title=f"Ultimos resultados {ligacompleta} {emojiliga}", description=f"A pedido de {interaction.user}", color = discord.Color.green())
+            for i in partidos:
+                embed.add_field(name =f"Partido por fecha {i['fecha']}", value =f"{i['nombrelocal']} {i['scorelocal']}   -   {i['scorevisitante']} {i['nombrevisitante']}")         
+            return embed
     
     except Exception as e:
         print(f"Error en la API: {e}")

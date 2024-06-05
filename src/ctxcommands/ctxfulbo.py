@@ -8,7 +8,7 @@ from discord.ext import commands
 quince_minutos = 900
 
 # Limitamos las API calls por las dudas. Esta libreria es medio negra. Lo dejamos asi por ahora, Mariano del futuro lo va a hacer manual
-@limits(calls=2, period=quince_minutos)
+@limits(calls=5, period=quince_minutos)
 async def fulbofunctx(ctx, liga):
     try:
         
@@ -33,23 +33,32 @@ async def fulbofunctx(ctx, liga):
             ligacompleta = response["competition"]["name"]
             partidos = []
 
-            #Recorre el Json para traer los resultados de la ultima fecha   
+            # Recorre el Json para traer los resultados de la ultima fecha   
             todospartidos = f"Ultimos resultados de {ligacompleta}\n"
 
-            for partido in response["matches"]:
-                nombrelocal = partido["homeTeam"]["name"]
-                nombrevisitante = partido["awayTeam"]["name"]
-                scorelocal = partido["score"]["fullTime"]["home"]
-                scorevisitante = partido["score"]["fullTime"]["away"]
-                fecha = partido["matchday"]
-                partido_info = f"Partido por fecha {fecha}: {nombrelocal} {scorelocal} - {scorevisitante} {nombrevisitante}\n"
-                todospartidos += partido_info
-             
-            # Log de ejecucion y se manda el mensaje
-            print (FechaActual)
-            print(f"Se ha ejecutado el comando fulbo")
-            print("Independiente sos amargo")
-            await ctx.send(todospartidos)       
+            # Mensaje en caso de que no haya partidos recientes (response viene vacio)
+            if len(response["matches"]) == 0:
+                print (FechaActual)
+                print(f"Se ha ejecutado el comando fulbo")
+                print("Independiente sos amargo")
+                await ctx.send("No hay partidos recientes para la liga seleccionada")
+
+            else:
+
+                for partido in response["matches"]:
+                    nombrelocal = partido["homeTeam"]["name"]
+                    nombrevisitante = partido["awayTeam"]["name"]
+                    scorelocal = partido["score"]["fullTime"]["home"]
+                    scorevisitante = partido["score"]["fullTime"]["away"]
+                    fecha = partido["matchday"]
+                    partido_info = f"Partido por fecha {fecha}: {nombrelocal} {scorelocal} - {scorevisitante} {nombrevisitante}\n"
+                    todospartidos += partido_info
+                
+                # Log de ejecucion y se manda el mensaje
+                print (FechaActual)
+                print(f"Se ha ejecutado el comando fulbo")
+                print("Independiente sos amargo")
+                await ctx.send(todospartidos)       
     
     except Exception as e:
         print(f"Error en la API: {e}")

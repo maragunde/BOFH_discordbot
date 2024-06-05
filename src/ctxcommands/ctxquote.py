@@ -70,7 +70,7 @@ async def qsearchfunctx(ctx, texto):
     cursorbusqueda = databasequotes.cursor()
 
     # Selecciona una quote de la DB en base a texto (ambos campos de usuario o de quote)
-    SQLbuscaquote = ("SELECT * FROM quotes WHERE quote LIKE ? OR username LIKE ?")
+    SQLbuscaquote = ("SELECT * FROM quotes WHERE quote LIKE ? OR username LIKE ? ORDER BY RANDOM()")
     cursorbusqueda.execute(SQLbuscaquote, ('%' + texto + '%', '%' + texto + '%'))
     quotesencontrados = cursorbusqueda.fetchall()
     
