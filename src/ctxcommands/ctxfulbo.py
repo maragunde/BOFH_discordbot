@@ -27,7 +27,7 @@ async def fulbofunctx(ctx, liga):
 
             # Llama a la API - pasamos parametro de la fecha de hoy, y trae siempre los resultados de la ultima semana
             connection = http.client.HTTPConnection('api.football-data.org')
-            headers = { 'X-Auth-Token': '4bda54479b67403f90a1e1dbc80ee4ba' }
+            headers = { 'X-Auth-Token': f'{FULBO_token}' }
             connection.request('GET', f'/v4/competitions/{liga}/matches?dateFrom={fechadesde_string}&dateTo={fechapedida_string}', None, headers )
             response = json.loads(connection.getresponse().read().decode())
             ligacompleta = response["competition"]["name"]
