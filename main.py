@@ -7,6 +7,7 @@ from datetime import datetime
 from db.dbops import agregarusuario, sincronizarUsuarios
 import os
 from dotenv import load_dotenv # <-- Solo para las keys storeadas en venv
+import re
 
 
 # IMPORT DE COMANDOS TREE (NATIVOS DISCORD)
@@ -535,9 +536,17 @@ async def on_message(message):
 
 #Lee el canal de Yelling
     if message.channel.id == 1238157304088760350: 
+        # Regex to match URLs
+        url_pattern = re.compile(r'http[s]?://\S+')
+        # Regex to match lowercase words
+        lowercase_pattern = re.compile(r'\b[a-z]+\b')
+        # Replace URLs with a placeholder to ignore them in lowercase detection
+        text_without_urls = url_pattern.sub('__URL__', message.content)
+        # Check for any lowercase words
+        has_lowercase = lowercase_pattern.search(text_without_urls) is not None
 
 #Chequeea por lowercase. Putea solo con haber un solo caracter en lowercase. No jodan.
-        if any(char.islower() for char in message.content): 
+        if has_lowercase: 
             print(FechaActual)
             print("Mensaje en lower case detectado en canal. Se ejecutara funcion de Yelling")
 
