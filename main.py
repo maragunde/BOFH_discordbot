@@ -535,7 +535,7 @@ async def on_message(message):
 ################### FUNCION DE ON_MESSAGE PARA YELLING ###################
 
 #Lee el canal de Yelling
-    if message.channel.id == 1238157304088760350: 
+    if message.channel.id == 758773471315492925: 
         # Regex to match URLs
         url_pattern = re.compile(r'http[s]?://\S+')
         # Regex to match lowercase words
