@@ -11,4 +11,4 @@ RUN pip install -r requirements.txt
 # Bundle app source
 COPY . /app
 
-CMD [ "python", "main.py" ]
+CMD [ "python","-u","main.py" ]
