@@ -90,9 +90,18 @@ load_dotenv()
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
-
 BOT_token = os.getenv('BOT_token')
-bot = commands.Bot(command_prefix='!', intents=intents, help_command=None)
+
+#Definicion de prefix, para buscarlo en cualquier parte del mensaje
+def get_prefix(bot, message):
+    prefixes = ['!']
+    for prefix in prefixes:
+        if prefix in message.content:
+            return prefix
+    # Default prefix
+    return '!'
+
+bot = commands.Bot(command_prefix=get_prefix, intents=intents, help_command=None)
 def main() -> None:
     bot.run(f'{BOT_token}')
 
@@ -334,13 +343,20 @@ async def on_message(message):
     if message.author.bot:
         return
     else:
-        botID = os.getenv('bridgebotID')
-        BridgeBotID = await bot.fetch_user(botID) # <--- Aca va el usr ID del Bridge bot de Discord (Puse el de godlike por ahora para poder probar)
+        BridgeBotID = os.getenv('bridgebotID') # <--- Aca va el usr ID del Bridge bot de Discord
 ##################################################################################################################
 # Todo esto se ejecuta cuando el usuario es el bot de bridge (o sea, el mensaje viene bridgeado de IRC, Slack, Telegram, etc.)
 
-        if message.author == BridgeBotID:
-            
+        if str(message.author.id) == BridgeBotID:
+
+                # Funcion para encontrar el prefijo del comando en cualquier parte del mensaje (para cuando lo manda el bridge bot)
+            if '!' in message.content:
+                # Extraemos el mensaje que viene despues del prefijo y cambiamos el mensaje original para pasarselo al bot y que ejecute el comando
+                command_start = message.content.index('!')
+                new_content = message.content[command_start:]
+                
+                message.content = new_content
+
             # Traemos el texto del mensaje y lo buscamos en la base
             textokarma = message.content.split()
             for texto in textokarma:
@@ -671,6 +687,7 @@ async def birras(ctx):
 # COMANDO PING
 @bot.command()
 async def ping(ctx):
+    print(f"Se ha ejecutado el comando !ping")
     await ctx.send("Pong!")
 
 #########################################################################################
