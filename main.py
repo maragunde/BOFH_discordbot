@@ -343,21 +343,18 @@ async def on_message(message):
     if message.author.bot:
         return
     else:
-        botID = os.getenv('bridgebotID')
-        BridgeBotID = await bot.fetch_user(botID) # <--- Aca va el usr ID del Bridge bot de Discord (Puse el de godlike por ahora para poder probar)
+        BridgeBotID = os.getenv('bridgebotID') # <--- Aca va el usr ID del Bridge bot de Discord
 ##################################################################################################################
 # Todo esto se ejecuta cuando el usuario es el bot de bridge (o sea, el mensaje viene bridgeado de IRC, Slack, Telegram, etc.)
 
-        if message.author == BridgeBotID:
+        if str(message.author.id) == BridgeBotID:
 
                 # Funcion para encontrar el prefijo del comando en cualquier parte del mensaje (para cuando lo manda el bridge bot)
-      
             if '!' in message.content:
                 # Extraemos el mensaje que viene despues del prefijo y cambiamos el mensaje original para pasarselo al bot y que ejecute el comando
                 command_start = message.content.index('!')
                 new_content = message.content[command_start:]
                 
-                original_content = message.content
                 message.content = new_content
 
             # Traemos el texto del mensaje y lo buscamos en la base
