@@ -340,10 +340,11 @@ async def on_message(message):
 
     palabra_base = None
 
-    if message.author.bot:
+    BridgeBotID = os.getenv('bridgebotID') # <--- Aca va el usr ID del Bridge bot de Discord
+
+    if message.author.bot and not str(message.author.id) == BridgeBotID:
         return
     else:
-        BridgeBotID = os.getenv('bridgebotID') # <--- Aca va el usr ID del Bridge bot de Discord
 ##################################################################################################################
 # Todo esto se ejecuta cuando el usuario es el bot de bridge (o sea, el mensaje viene bridgeado de IRC, Slack, Telegram, etc.)
 
