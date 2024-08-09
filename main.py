@@ -340,10 +340,11 @@ async def on_message(message):
 
     palabra_base = None
 
-    if message.author.bot:
+    BridgeBotID = os.getenv('bridgebotID') # <--- Aca va el usr ID del Bridge bot de Discord
+
+    if message.author.bot and not str(message.author.id) == BridgeBotID:
         return
     else:
-        BridgeBotID = os.getenv('bridgebotID') # <--- Aca va el usr ID del Bridge bot de Discord
 ##################################################################################################################
 # Todo esto se ejecuta cuando el usuario es el bot de bridge (o sea, el mensaje viene bridgeado de IRC, Slack, Telegram, etc.)
 
@@ -356,6 +357,11 @@ async def on_message(message):
                 new_content = message.content[command_start:]
                 
                 message.content = new_content
+                # de https://github.com/Rapptz/discord.py/issues/2238#issuecomment-504252776
+                # esto es necesario para invocar los comandos directamente porque si sigue el codigo y entra por el process_comand 
+                # tira return sin hacer nada porque bot=true esto es menos cerdo que sobreescribir el metodo.
+                ctx = await bot.get_context(message)
+                await bot.invoke(ctx)
 
             # Traemos el texto del mensaje y lo buscamos en la base
             textokarma = message.content.split()
@@ -551,7 +557,7 @@ async def on_message(message):
 ################### FUNCION DE ON_MESSAGE PARA YELLING ###################
 
 #Lee el canal de Yelling
-    if message.channel.id == 1238157304088760350: 
+    if message.channel.id == 758773471315492925: 
         # Regex to match URLs
         url_pattern = re.compile(r'http[s]?://\S+')
         # Regex to match lowercase words
@@ -571,6 +577,8 @@ async def on_message(message):
                 lines = file.readlines()
             await message.reply(random.choice(lines).strip())
 
+# Fin de todo, se va el mensaje a ser procesado por los comandos.        
+    # print(message,message.content)
     await bot.process_commands(message) # <-- No tocar esto jamas o rompe los comandos on_message. Siempre dejar al final de la funcion on_message
 
 #########################################################################################

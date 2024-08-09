@@ -48,7 +48,7 @@ async def undergroundfunctx(ctx):
     }
 
     # Hacemos el API call y traemos los estados de cada linea
-    api_key = '8847defd8a9c48578339178623f278ea'
+    api_key = os.getenv('SUBTEUK_api_key')
     tube_status = get_tfl_status(api_key)
     if tube_status:
         for line in tube_status:
