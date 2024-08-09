@@ -357,6 +357,11 @@ async def on_message(message):
                 new_content = message.content[command_start:]
                 
                 message.content = new_content
+                # de https://github.com/Rapptz/discord.py/issues/2238#issuecomment-504252776
+                # esto es necesario para invocar los comandos directamente porque si sigue el codigo y entra por el process_comand 
+                # tira return sin hacer nada porque bot=true esto es menos cerdo que sobreescribir el metodo.
+                ctx = await bot.get_context(message)
+                await bot.invoke(ctx)
 
             # Traemos el texto del mensaje y lo buscamos en la base
             textokarma = message.content.split()
@@ -572,6 +577,8 @@ async def on_message(message):
                 lines = file.readlines()
             await message.reply(random.choice(lines).strip())
 
+# Fin de todo, se va el mensaje a ser procesado por los comandos.        
+    # print(message,message.content)
     await bot.process_commands(message) # <-- No tocar esto jamas o rompe los comandos on_message. Siempre dejar al final de la funcion on_message
 
 #########################################################################################
