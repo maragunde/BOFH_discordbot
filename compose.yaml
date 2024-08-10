@@ -8,3 +8,4 @@ services:
       - ./db/discordusrs.db:/app/db/discordusrs.db:rw
       - ./db/karma.db:/app/db/karma.db:rw
       - ./db/quotes.db:/app/db/quotes.db:rw
+    restart: always
