@@ -351,7 +351,7 @@ async def on_message(message):
         if str(message.author.id) == BridgeBotID:
 
                 # Funcion para encontrar el prefijo del comando en cualquier parte del mensaje (para cuando lo manda el bridge bot)
-            if '!' in message.content:
+            if '> !' in message.content:
                 # Extraemos el mensaje que viene despues del prefijo y cambiamos el mensaje original para pasarselo al bot y que ejecute el comando
                 command_start = message.content.index('!')
                 new_content = message.content[command_start:]
