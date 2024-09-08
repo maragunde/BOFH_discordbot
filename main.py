@@ -558,14 +558,14 @@ async def on_message(message):
 
 #Lee el canal de Yelling
     if message.channel.id == 758773471315492925: 
-        # Regex to match URLs
-        url_pattern = re.compile(r'http[s]?://\S+')
+        # Regex to match URLs and emojis
+        url_and_emoji_pattern = re.compile(r'http[s]?://\S+|:[^:]+:')
         # Regex to match lowercase words
         lowercase_pattern = re.compile(r'\b[a-z]+\b')
-        # Replace URLs with a placeholder to ignore them in lowercase detection
-        text_without_urls = url_pattern.sub('__URL__', message.content)
+        # Replace URLs and emojis with a placeholder to ignore them in lowercase detection
+        text_without_urls_and_emojis = url_and_emoji_pattern.sub('__IGNORED__', message.content)
         # Check for any lowercase words
-        has_lowercase = lowercase_pattern.search(text_without_urls) is not None
+        has_lowercase = lowercase_pattern.search(text_without_urls_and_emojis) is not None
 
 #Chequeea por lowercase. Putea solo con haber un solo caracter en lowercase. No jodan.
         if has_lowercase: 
