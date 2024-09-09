@@ -474,8 +474,8 @@ async def on_message(message):
             textokarma = message.content.split()
             
             for texto in textokarma:
-                if texto.endswith("++") or texto.endswith("--"):
-
+                #if texto.endswith("++") or texto.endswith("--"):
+                if re.match(r'^\S+(\+\+|\-\-)$', texto):
                     palabra_base = texto[:-2]
 
                     # Ejecuta query para verificar si la palabra y el usuario existen en la DB
