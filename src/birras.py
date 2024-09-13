@@ -4,12 +4,14 @@ import discord
 from discord import Embed
 from ics import Calendar
 import re
+import os
+from dotenv import load_dotenv
 
 async def birrasfunc(interaction):
     FechaActual = datetime.now(timezone.utc)
 
     # Traemos los eventos del Google Calendar publico de Sysarmy
-    response = requests.get("https://calendar.google.com/calendar/u/0/ical/c_ntsrg10qsjmfeshhgap8ane1ss%40group.calendar.google.com/public/basic.ics")
+    response = requests.get(os.getenv('calendar_birras'))
     calendar = Calendar(response.text)
 
     # Creamos la lista para los embeds de eventos
@@ -22,7 +24,7 @@ async def birrasfunc(interaction):
         evento_UTC = event.begin.datetime.astimezone(timezone.utc)
 
         if evento_UTC > FechaActual:
-            eventosformateados = True
+            eventosformateados = True 
             
             # Formateo de fecha
             fechaformateada = evento_UTC.strftime("%d-%m-%Y %H:%M")
@@ -31,11 +33,18 @@ async def birrasfunc(interaction):
             description = re.sub(r'<a href=\'(.*?)\'>.*?</a>', r'\1', event.description)
             description = re.sub(r'^Evento creado por https://github.com/sysarmy/disneyland/tree/master/adminbirrator 🍻$', '', description, flags=re.MULTILINE)
 
-            # Appendeamos el evento para el embed
-            embed_fields.append((event.name, fechaformateada, description))
+            # Busca 'birras' en el evento
+            if 'birras' in event.name.lower() or 'birras' in description.lower():
+                eventosformateados = True
+
+                # Formateo de fecha
+                fechaformateada = evento_UTC.strftime("%d-%m-%Y %H:%M")
+                
+                # Appendeamos el evento para el embed
+                embed_fields.append((event.name, fechaformateada, description))
 
     if eventosformateados:
-        
+
         # Log + Mandamos mensaje
         print(FechaActual)
         print("Se ha ejecutado el comando !birras")
@@ -54,5 +63,5 @@ async def birrasfunc(interaction):
         print("Se ha ejecutado el comando !birras")
 
         embed = Embed(title="Birras", color=discord.Color.green())
-        embed.add_field(name="Birras", value="No hay birras o eventos programados próximamente. Revisa: https://www.meetup.com/sysarmy/", inline=False)
+        embed.add_field(name="Birras", value="No encontré Adminbirras programadas próximamente. Revisa: https://www.meetup.com/sysarmy/", inline=False)
         return embed

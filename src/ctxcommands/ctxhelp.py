@@ -10,7 +10,7 @@ async def helpfunctx(ctx, texto):
     if texto is None:
         
         mensajeayuda_general = """Informacion general sobre los comandos del bot de Sysarmy       
-                          !dolar !cripto !euro !fulbo !pesos !clima !subte !underground !feriadoAR !feriadoCL !feriadoES !feriadoMX !feriadoUY !q !qsearch !qadd !rank !kgivers !kgiven !karma !birras
+                          !dolar !cripto !euro !fulbo !pesos !clima !subte !underground !feriadoAR !feriadoCL !feriadoES !feriadoMX !feriadoUY !q !qsearch !qadd !rank !kgivers !kgiven !karma !birras !flip !shrug !nerdearla
                           Mas detalles en el canal #help-bot-commands de Discord, dentro de la seccion de Welcome! - o ejecutando /help desde Discord"""
         await ctx.send(mensajeayuda_general)
    
@@ -41,7 +41,7 @@ async def helpfunctx(ctx, texto):
     elif texto == "dolar":
         await ctx.send("Pone !dolar y te da los precios de la timba. Opcionalmente se puede especifica el valor en pesos, Ej: '!dolar 500'")
 
-    elif texto == "feriado" or "feriadoar" or "feriadomx" or "feriadoes" or "feriadocl" or "feriadouy":
+    elif texto in ["feriado", "feriadoar", "feriadomx", "feriadoes", "feriadocl", "feriadouy"]:
       await ctx.send("Pone !feriadouy !feriadoar !feriadocl !feriadoes !feriadomx y te da los proximos feriados para el pais seleccionado. No requiere argumentos")   
 
     elif texto == "euro":
@@ -60,8 +60,11 @@ async def helpfunctx(ctx, texto):
       await ctx.send("Pone !pesos y el monto para que te calcule el precio en USD. Ej: '!pesos 10000'")
 
     elif texto == "birras":
-      await ctx.send("Pone !birras para consultar las proximas birras / eventos en el Google Calendar publico de Sysarmy. NO requiere argumentos")
+      await ctx.send("Pone !birras para consultar las proximas Adminbirras en el Google Calendar publico de Sysarmy. No requiere argumentos")
+
+    elif texto == "nerdearla":
+      await ctx.send("Pone !nerdearla para consultar charlas subidas a YouTube y agenda de Nerdearla en base a un texto. Ej: '!nerdearla kubernetes'")
 
     # Log
     print(FechaActual)
-    print ("Se ha ejecutado el comando !help")
+    print (f'Se ha ejecutado el comando !help para {texto}')

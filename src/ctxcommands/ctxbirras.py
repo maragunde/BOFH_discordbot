@@ -11,6 +11,7 @@ async def birrasfunctx(ctx):
     calendar = Calendar(response.text)
 
     eventosformateados = ""
+    
     for event in calendar.events:
         # Convertimos las timezones para poder compararlas
         evento_UTC = event.begin.datetime.astimezone(timezone.utc)
@@ -24,8 +25,13 @@ async def birrasfunctx(ctx):
             description = re.sub(r'<a href=\'(.*?)\'>.*?</a>', r'\1', event.description)
             description = re.sub(r'^Evento creado por https://github.com/sysarmy/disneyland/tree/master/adminbirrator 🍻$', '', description, flags=re.MULTILINE)
 
-            evento = f"**Nombre:** {event.name}\n**Cuando:** {fechaformateada}\n**Descripcion:** {description}\n\n"
-            eventosformateados += evento
+            # Busca 'birras' en el evento
+            if 'birras' in event.name.lower() or 'birras' in description.lower():
+                # Formateo de fecha
+                fechaformateada = evento_UTC.strftime("%d-%m-%Y %H:%M")
+
+                evento = f"**Nombre:** {event.name}\n**Cuando:** {fechaformateada}\n**Descripcion:** {description}\n\n"
+                eventosformateados += evento
 
     if eventosformateados:
         # Log + Mandamos mensaje
@@ -37,4 +43,4 @@ async def birrasfunctx(ctx):
         # Log = Mandamos mensaje
         print(FechaActual)
         print("Se ha ejecutado el comando !birras")
-        await ctx.send("No hay birras o eventos programados proximamente. Revisa: https://www.meetup.com/sysarmy/")
+        await ctx.send("No encontré Adminbirras programadas proximamente. Revisa: https://www.meetup.com/sysarmy/")

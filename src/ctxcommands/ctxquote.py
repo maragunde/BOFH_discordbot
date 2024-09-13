@@ -17,6 +17,8 @@ async def quoteaddfunctx(ctx, quote):
     cursorquotes.execute(SQLbuscar, (quote, str(ctx.author)))
     quotesencontradas = cursorquotes.fetchall()
 
+    
+
     if len(quotesencontradas) == 0:
         
         # Log
@@ -49,10 +51,13 @@ async def quotefunctx(ctx):
     SQLcount = ("SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1")
     cursorquotes.execute(SQLcount)
     historicquote = cursorquotes.fetchone()
+
+    # Formateamos fecha
+    date_str = str(historicquote[2])[:10]
             
     # Se crea el CTX con la respuesta
     await ctx.send("Quote random de sysarmy")
-    await ctx.send(f"{historicquote[0]} - by {historicquote[1]} - Date: {historicquote[2]}")
+    await ctx.send(f"{historicquote[0]} - by {historicquote[1]} - Date: {date_str}")
 
     # Log 
     print(FechaActual)
