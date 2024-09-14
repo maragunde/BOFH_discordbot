@@ -28,6 +28,7 @@ from src.birras import birrasfunc
 from src.karma import karmagiversfunc, karmarankfunc, karmauserfunc
 from src.help import helpfunc
 from src.quote import quotefunc, qsearchfunc
+from src.nerdearla import nerdearlacharlasfunc
 
 # IMPORT DE COMANDOS VERSION SIMPLE (FUNCIONAN POR TEXTO USANDO FUNCION CTX.SEND) 
 from src.ctxcommands.ctxclima import climafunctx
@@ -47,6 +48,7 @@ from src.ctxcommands.ctxkarma import karmarankfunctx, karmawordfunctx, karmagive
 from src.ctxcommands.ctxquote import quotefunctx, qsearchfunctx, quoteaddfunctx
 from src.ctxcommands.ctxsubte import subtefunctx
 from src.ctxcommands.ctxunderground import undergroundfunctx
+from src.ctxcommands.ctxnerdearla import nerdearlafunctx
                                               
                                                                     
 #                @@@@@@@@@@@@@    =@@@*     @@@@    +@@@@@@@@@@@@@   
@@ -377,90 +379,95 @@ async def on_message(message):
                     IRCusername = message.content[start_index + 1:end_index]
                         
                     # Ejecuta query para verificar si la palabra existe en la DB
-                    cursorkarma.execute("SELECT * FROM karma WHERE palabra = ?", (palabra_base,))
+                    cursorkarma.execute("SELECT * FROM karma WHERE LOWER(palabra) = ?", (palabra_base.lower(),))
+                    print(palabra_base.lower())
                     existing_word = cursorkarma.fetchone()
 
                     # Ejecuta query para verificar si el usuario existe en la DB
-                    cursorkarma.execute("SELECT * FROM karma WHERE palabra = ? AND isuser = 'YES'", (IRCusername,))
+                    cursorkarma.execute("SELECT * FROM karma WHERE LOWER(palabra) = ? AND isuser = 'YES'", (IRCusername.lower(),))
                     existing_user = cursorkarma.fetchone()
                         
                     # Si la palabra existe, procede con las funciones de UPDATE
-                    if existing_word:      
+                    if existing_word:
                                 
                             # Update word en la DB para karma++ y se imprime confirmacion
                             if texto.endswith("++"):
                                 print("This is a ++ word!")
-                                cursorkarma.execute("UPDATE karma SET karmavalue = karmavalue + 1 WHERE palabra = ?", (palabra_base,))
+                                cursorkarma.execute("UPDATE karma SET karmavalue = karmavalue + 1 WHERE LOWER(palabra) = ?", (palabra_base.lower(),))
                                 databasekarma.commit()
-                                cursorkarma.execute("SELECT karmavalue FROM karma WHERE palabra = ?", (palabra_base,))
+                                cursorkarma.execute("SELECT karmavalue FROM karma WHERE LOWER(palabra) = ?", (palabra_base.lower(),))
                                 updated_karma = cursorkarma.fetchone()[0]
                                 print(FechaActual)
                                 print(f"Karma++ para {palabra_base}!")
-                                await message.channel.send(f"+1 karma para [{palabra_base}]. Current karma = {updated_karma}")
+                                mensaje = f"+1 karma para {palabra_base.lower()}. Current karma is: {updated_karma} \n"
                                 
                                 # Ahora Chequeamos el autor del mensaje
                                 if existing_user:
                                     # Se le da karmagiven al usuario y se imprime confirmacion
-                                    cursorkarma.execute("UPDATE karma SET karmagiven = karmagiven + 1 WHERE palabra = ? AND isuser = 'YES'", (IRCusername,))
+                                    cursorkarma.execute("UPDATE karma SET karmagiven = karmagiven + 1 WHERE LOWER(palabra) = ? AND isuser = 'YES'", (IRCusername.lower(),))
                                     databasekarma.commit()
                                     print(f"+1 Karmagiven para {IRCusername}")
-                                    await message.channel.send(f"+1 karmagiven para <{IRCusername}>")
+                                    mensaje += f"+1 karmagiven para <{IRCusername}>"
+                                    await message.channel.send(mensaje)
 
                                 elif existing_user is None:
                                     # Se agrega al nuevo usuario a la DB con karmagiven inicial y se imprime confirmacion
-                                    cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, 1, 'YES', 0)", (IRCusername,))
-                                    cursorkarma.execute("UPDATE karma SET karmagiven = karmagiven + 1 WHERE palabra = ? AND isuser = 'YES'", (IRCusername,))
+                                    cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, 1, 'YES', 0)", (IRCusername.lower(),))
+                                    cursorkarma.execute("UPDATE karma SET karmagiven = karmagiven + 1 WHERE palabra = ? AND isuser = 'YES'", (IRCusername.lower(),))
                                     databasekarma.commit()
-                                    cursorkarma.execute("SELECT palabra FROM karma WHERE palabra = ? AND isuser = 'YES'", (IRCusername,))
+                                    cursorkarma.execute("SELECT palabra FROM karma WHERE LOWER(palabra) = ? AND isuser = 'YES'", (IRCusername.lower(),))
                                     print(f"Nuevo usuario externo [{IRCusername}] agregado a la DB!.")
-                                    await message.channel.send(f"+1 karmagiven para <{IRCusername}>. Welcome to the karma user list! ")
+                                    mensaje += f"+1 karmagiven para <{IRCusername}>. Welcome to the karma user list! "
+                                    await message.channel.send(mensaje)
                             
                                 # Update word en la DB para karma-- y se imprime confirmacion
                             elif texto.endswith("--"):
-                                cursorkarma.execute("UPDATE karma SET karmavalue = karmavalue - 1 WHERE palabra = ?", (palabra_base,))
+                                cursorkarma.execute("UPDATE karma SET karmavalue = karmavalue - 1 WHERE LOWER(palabra) = ?", (palabra_base.lower(),))
                                 databasekarma.commit()
-                                cursorkarma.execute("SELECT karmavalue FROM karma WHERE palabra = ?", (palabra_base,))
+                                cursorkarma.execute("SELECT karmavalue FROM karma WHERE LOWER(palabra) = ?", (palabra_base.lower(),))
                                 updated_karma = cursorkarma.fetchone()[0]
                                 print(FechaActual)
                                 print(f"Karma--  para {palabra_base}!")
-                                await message.channel.send(f"-1 karma para {palabra_base}. Current karma = {updated_karma}")
-        
+                                await message.channel.send(f"-1 karma para {palabra_base.lower()}. Current karma = {updated_karma}")
+
                     # Si la palabra no existe, procede con las funciones de INSERT
                     else:
                         # Insert word en la DB para karma++ y se imprime confirmacion
                         if texto.endswith("++"):
                             initial_karma = 1 # <-- Como es una nueva palabra y es ++, el karma inicial siempe es de 1
-                            cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, ?, 'NO', ?)", (palabra_base, initial_karma, 0))
+                            cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, ?, 'NO', ?)", (palabra_base.lower(), initial_karma, 0))
                             databasekarma.commit()
-                            cursorkarma.execute("SELECT karmavalue FROM karma WHERE palabra = ?", (palabra_base,))
+                            cursorkarma.execute("SELECT karmavalue FROM karma WHERE palabra = ?", (palabra_base.lower(),))
                             updated_karma = cursorkarma.fetchone()[0]
                             print(f"Nueva palabra agregada a la DB. Karma++  para {palabra_base}")
-                            await message.channel.send(f"+1 karma para {palabra_base}. Current karma = {updated_karma}")
+                            mensaje = f"+1 karma para {palabra_base}. Current karma is: {updated_karma.lower()} \n"
 
                             # Chequeamos el autor del mensaje
                             if existing_user:
                                 # Se le da karmagiven al usuario y se imprime confirmacion
-                                cursorkarma.execute("UPDATE karma SET karmagiven = karmagiven + 1 WHERE palabra = ? AND isuser = 'YES'", (IRCusername,))
+                                cursorkarma.execute("UPDATE karma SET karmagiven = karmagiven + 1 WHERE LOWER(palabra) = ? AND isuser = 'YES'", (IRCusername.lower(),))
                                 databasekarma.commit()
                                 print(FechaActual)
                                 print(f"Se ha dado karmagiven +1 a {IRCusername}.")
-                                await message.channel.send(f"+1 karmagiven para <{IRCusername}>.")
+                                mensaje += f"+1 karmagiven para <{IRCusername}>."
+                                await message.channel.send(mensaje)
 
                             elif existing_user is None:
                                 # Se agrega al nuevo usuario a la DB con karmagiven inicial y se imprime confirmacion
-                                cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, 1, 'YES', 0)", (IRCusername,))
-                                cursorkarma.execute("UPDATE karma SET karmagiven = karmagiven + 1 WHERE palabra = ? AND isuser = 'YES'", (IRCusername,))
+                                cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, 1, 'YES', 0)", (IRCusername.lower(),))
+                                cursorkarma.execute("UPDATE karma SET karmagiven = karmagiven + 1 WHERE palabra = ? AND isuser = 'YES'", (IRCusername.lower(),))
                                 databasekarma.commit()
                                 cursorkarma.execute("SELECT palabra FROM karma WHERE palabra = ? AND isuser = 'YES'", (IRCusername,))
                                 print(f"Nuevo usuario externo [{IRCusername}] agregado a la DB!.")
-                                await message.channel.send(f"+1 karmagiven para <{IRCusername}>. Welcome to the karma user list! ")
+                                mensaje += f"+1 karmagiven para <{IRCusername}>. Welcome to the karma user list!"
+                                await message.channel.send(mensaje)
                         
                         # Insert palabra en la DB para karma-- y se imprime confirmacion
                         elif texto.endswith("--"):
                             initial_karma = -1 ## <-- Como es una nueva palabra y es --, el karma inicial siempe es de -1
-                            cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, ?, 'NO', ?)", (palabra_base, initial_karma, 0))
+                            cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, ?, 'NO', ?)", (palabra_base.lower(), initial_karma, 0))
                             databasekarma.commit()
-                            cursorkarma.execute("SELECT karmavalue FROM karma WHERE palabra = ?", (palabra_base,))
+                            cursorkarma.execute("SELECT karmavalue FROM karma WHERE palabra = ?", (palabra_base.lower(),))
                             updated_karma = cursorkarma.fetchone()[0]
                             print(FechaActual)
                             print(f"Nueva palabra agregada a la DB. Karma--  para {palabra_base}")
@@ -480,7 +487,7 @@ async def on_message(message):
 
                     # Ejecuta query para verificar si la palabra y el usuario existen en la DB
                     cursorusers.execute("SELECT * FROM usuarios WHERE username = ?", (message.author.name,))
-                    cursorkarma.execute("SELECT * FROM karma WHERE palabra = ?", (palabra_base,))
+                    cursorkarma.execute("SELECT * FROM karma WHERE LOWER(palabra) = ?", (palabra_base.lower(),))
                     existing_word = cursorkarma.fetchone()
                     
 
@@ -490,13 +497,13 @@ async def on_message(message):
 
                             # Update word en la DB para karma++
                             if texto.endswith("++"):
-                                cursorkarma.execute("UPDATE karma SET karmavalue = karmavalue + 1 WHERE palabra = ?", (palabra_base,))
+                                cursorkarma.execute("UPDATE karma SET karmavalue = karmavalue + 1 WHERE LOWER(palabra) = ?", (palabra_base.lower(),))
                                 databasekarma.commit()
-                                cursorkarma.execute("SELECT karmavalue FROM karma WHERE palabra = ?", (palabra_base,))
+                                cursorkarma.execute("SELECT karmavalue FROM karma WHERE LOWER(palabra) = ?", (palabra_base.lower(),))
                                 updated_karma = cursorkarma.fetchone()[0]
                                 print(FechaActual)
                                 print(f"Karma ++ para {palabra_base}")
-                                await message.channel.send(f"+1 karma para {palabra_base}. Current karma is: {updated_karma}")
+                                mensaje = f"+1 karma para {palabra_base.lower()}. Current karma is: {updated_karma} \n"
 
                                 # Se le da karmagiven al usuario y se imprime mensaje
                                 cursorusers.execute("UPDATE usuarios SET karmagiven = karmagiven + 1 WHERE username = ?", (message.author.name,))
@@ -504,31 +511,31 @@ async def on_message(message):
                                 cursorusers.execute("SELECT karmagiven FROM usuarios WHERE username = ?", (message.author.name,))
                                 updated_karmagivenusr = cursorusers.fetchone()[0]
                                 print(f"Se ha dado karmagiven +1 a {message.author.name}.")
-                                await message.channel.send(f"+1 karmagiven para {message.author}. Current karmagiven is: {updated_karmagivenusr}")
-
+                                mensaje += f"+1 karmagiven para {message.author}. Current karmagiven is: {updated_karmagivenusr}"
+                                await message.channel.send(mensaje)
                             
                             # Update palabra en la DB para karma--
                             elif texto.endswith("--"):
-                                cursorkarma.execute("UPDATE karma SET karmavalue = karmavalue - 1 WHERE palabra = ?", (palabra_base,))
+                                cursorkarma.execute("UPDATE karma SET karmavalue = karmavalue - 1 WHERE LOWER(palabra) = ?", (palabra_base.lower(),))
                                 databasekarma.commit()
-                                cursorkarma.execute("SELECT karmavalue FROM karma WHERE palabra = ?", (palabra_base,))
+                                cursorkarma.execute("SELECT karmavalue FROM karma WHERE LOWER(palabra) = ?", (palabra_base.lower(),))
                                 updated_karma = cursorkarma.fetchone()[0]
                                 print(FechaActual)
                                 print(f"Karma -- para {palabra_base}")
-                                await message.channel.send(f"-1 karma para {palabra_base}. Current karma is: {updated_karma}")
+                                await message.channel.send(f"-1 karma para {palabra_base.lower()}. Current karma is: {updated_karma}")
         
                     # Si la palabra no existe, procede con las funciones de INSERT
                     else:
                         # Insert palabra en la DB para karma++
                         if texto.endswith("++"):
                             initial_karma = 1
-                            cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, ?, 'NO', ?)", (palabra_base, initial_karma, 0))
+                            cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, ?, 'NO', ?)", (palabra_base.lower(), initial_karma, 0))
                             databasekarma.commit()
-                            cursorkarma.execute("SELECT karmavalue FROM karma WHERE palabra = ?", (palabra_base,))
+                            cursorkarma.execute("SELECT karmavalue FROM karma WHERE LOWER(palabra) = ?", (palabra_base.lower(),))
                             updated_karma = cursorkarma.fetchone()[0]
                             print(FechaActual)
                             print(f"Nueva palabra agregada a la DB. Karma ++ para {palabra_base}")
-                            await message.channel.send(f"+1 karma para {palabra_base}. Current karma is: {updated_karma}")
+                            mensaje = f"+1 karma para {palabra_base.lower()}. Current karma is: {updated_karma} \n"
 
                             # Se le da karmagiven al usuario y se imprime mensaje
                             cursorusers.execute("UPDATE usuarios SET karmagiven = karmagiven + 1 WHERE username = ?", (message.author.name,))
@@ -536,18 +543,20 @@ async def on_message(message):
                             cursorusers.execute("SELECT karmagiven FROM usuarios WHERE username = ?", (message.author.name,))
                             updated_karmagivenusr = cursorusers.fetchone()[0]
                             print(f"Se ha dado karmagiven +1 a {message.author.name}.")
-                            await message.channel.send(f"+1 karmagiven para {message.author}. Current karmagiven is: {updated_karmagivenusr}")
+                            mensaje += f"+1 karmagiven para {message.author}. Current karmagiven is: {updated_karmagivenusr}"
+                            await message.channel.send(mensaje)
                         
                         # Insert palabra en la DB para karma--
                         elif texto.endswith("--"):
                             initial_karma = -1
-                            cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, ?, 'NO', ?)", (palabra_base, initial_karma, 0))
+                            cursorkarma.execute("INSERT INTO karma (palabra, karmavalue, isuser, karmagiven) VALUES (?, ?, 'NO', ?)", (palabra_base.lower(), initial_karma, 0))
                             databasekarma.commit()
-                            cursorkarma.execute("SELECT karmavalue FROM karma WHERE palabra = ?", (palabra_base,))
+                            cursorkarma.execute("SELECT karmavalue FROM karma WHERE LOWER(palabra) = ?", (palabra_base.lower(),))
                             updated_karma = cursorkarma.fetchone()[0]
                             print(FechaActual)
                             print(f"Nueva palabra agregada a la DB. Karma -- para {palabra_base}")
-                            await message.channel.send(f"-1 karma para {palabra_base}. Current karma is: {updated_karma}")
+                            await message.channel.send(f"-1 karma para {palabra_base.lower()}. Current karma is: {updated_karma}")
+
 
     databasekarma.commit()
     databasekarma.close()
@@ -697,6 +706,23 @@ async def birras(ctx):
 async def ping(ctx):
     print(f"Se ha ejecutado el comando !ping")
     await ctx.send("Pong!")
+
+# COMANDO FLIP
+@bot.command()
+async def flip(ctx):
+    print(f"Se ha ejecutado el comando !flip")
+    await ctx.send("(╯°□°）╯︵ ┻━┻")
+
+# COMANDO SHRUG
+@bot.command()
+async def shrug(ctx):
+    print(f"Se ha ejecutado el comando !flip")
+    await ctx.send("¯\_(ツ)_/¯")
+
+# COMANDO NERDEARLA
+@bot.command()
+async def nerdearla(ctx, texto):
+    await nerdearlafunctx(ctx, texto)
 
 #########################################################################################
 ################### LLAMADAS DE COMANDOS SLASH NATIVOS DISCORD (TREE) ###################
@@ -861,6 +887,12 @@ async def quotesearch(interaction: Interaction, texto:str):
 @bot.tree.command(name="birrassysarmy", description="Proximas birras / eventos de Sysarmy")
 async def birras(interaction: Interaction):
     await interaction.response.send_message(embed= await birrasfunc(interaction))
+
+
+# COMANDO NERDEARLA
+@bot.tree.command(name="nerdearlacharlas", description="Busca charlas de Nerdearla en YouTube y agenda de evento")
+async def nerdearlacharlas(interaction: Interaction, texto:str):
+    await nerdearlacharlasfunc(interaction, texto)
 
 if __name__ == '__main__':
     main()

@@ -22,7 +22,7 @@ async def quotefunc(interaction):
     date_str = str(historicquote[2])[:10]
 
     # Se crea el embedd con la respuesta
-    embed = Embed(title=f"Quote historica", description=f"cortesia de by {interaction.user}", color=discord.Color.green())
+    embed = Embed(title=f"Quote historica", description=f"a pedido de {interaction.user}", color=discord.Color.green())
     embed.set_thumbnail(url="https://pbs.twimg.com/profile_images/1356823152391843844/_Eooxcxc_400x400.png")
     embed.add_field(name="Quote historica de Sysarmy", value=f"{historicquote[0]} - by {historicquote[1]} - Date: {date_str}", inline=False)
 
@@ -51,7 +51,7 @@ async def qsearchfunc(interaction, texto):
 
     # Si el texto no se encuentra quoteado, devuelve la respuesta
     if len(quotesencontrados) == 0:
-        embed = Embed(title=f"Quote historica cortesia de by {interaction.user}", description=f"{str(len(quotesencontrados))} quotes encontradas para {texto}", color = discord.Color.green())
+        embed = Embed(title=f"Quote historica cortesia de {interaction.user}", description=f"{str(len(quotesencontrados))} quotes encontradas para {texto}", color = discord.Color.green())
         embed.set_thumbnail(url="https://pbs.twimg.com/profile_images/1356823152391843844/_Eooxcxc_400x400.png")
         embed.add_field(name="Quote historica de Sysarmy", value =f"No se han encontrado quotes para {texto}", inline=False)
 
@@ -61,7 +61,7 @@ async def qsearchfunc(interaction, texto):
 
     else:
         # Se crea el embed con la respuesta para cada un maximo de 4 quotes
-        embed = Embed(title=f"Quote historica cortesia de by {interaction.user}", description=f"{str(len(quotesencontrados))} quotes encontradas para {texto}. Aca hay algunas:", color = discord.Color.green())
+        embed = Embed(title=f"A pedido de {interaction.user}", description=f"{str(len(quotesencontrados))} quotes encontradas para {texto}. Aca hay algunas:", color = discord.Color.green())
         embed.set_thumbnail(url="https://pbs.twimg.com/profile_images/1356823152391843844/_Eooxcxc_400x400.png")
         for i, quote in enumerate(quotesencontrados[:4], start=1):
             embed.add_field(name=f"Quote de {quote[1]} - Fecha: {quote[2][0:10]}", value =f"{quote[0]}", inline=False)

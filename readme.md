@@ -1,7 +1,7 @@
 
 BOFH - Discord community bot for Sysarmy
 
-Version 1.0 - May 2024
+Version 1.2 - Sep 2024
 
 by @Qwuor01 and @aragunde
 
@@ -44,11 +44,12 @@ El comando help detalla instrucciones de uso para cada uno.
 
 Comandos incluidos en V1.0:
 
- - De feriados  --> !feriadomx !feriadoar !feriadouy !feriadocl !feriadoes
- - Lifestyle       --> !underground !subte !clima !fulbo !birras
- - Economia    --> !cripto !dolar !euro !pesos
+ - De feriados    --> !feriadomx !feriadoar !feriadouy !feriadocl !feriadoes
+ - Lifestyle      --> !underground !subte !clima !fulbo !flip !shrug
+ - Economia       --> !cripto !dolar !euro !pesos
  - Karma          --> !rank !karma !kgiven !kgivers
  - Quote          --> !q !qsearch !qadd
+ - Comunidad      --> !birras !nerdearla
 ---
 **SISTEMA DE KARMA**
 
