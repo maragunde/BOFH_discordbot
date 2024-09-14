@@ -353,7 +353,7 @@ async def on_message(message):
         if str(message.author.id) == BridgeBotID:
 
                 # Funcion para encontrar el prefijo del comando en cualquier parte del mensaje (para cuando lo manda el bridge bot)
-            if '!' in message.content:
+            if '> !' in message.content:
                 # Extraemos el mensaje que viene despues del prefijo y cambiamos el mensaje original para pasarselo al bot y que ejecute el comando
                 command_start = message.content.index('!')
                 new_content = message.content[command_start:]
@@ -481,8 +481,8 @@ async def on_message(message):
             textokarma = message.content.split()
             
             for texto in textokarma:
-                if texto.endswith("++") or texto.endswith("--"):
-
+                #if texto.endswith("++") or texto.endswith("--"):
+                if re.match(r'^[a-zA-Z0-9]+(\+\+|\-\-)$', texto):
                     palabra_base = texto[:-2]
 
                     # Ejecuta query para verificar si la palabra y el usuario existen en la DB
@@ -567,14 +567,14 @@ async def on_message(message):
 
 #Lee el canal de Yelling
     if message.channel.id == 758773471315492925: 
-        # Regex to match URLs
-        url_pattern = re.compile(r'http[s]?://\S+')
+        # Regex to match URLs and emojis
+        url_and_emoji_pattern = re.compile(r'http[s]?://\S+|:[^:]+:')
         # Regex to match lowercase words
         lowercase_pattern = re.compile(r'\b[a-z]+\b')
-        # Replace URLs with a placeholder to ignore them in lowercase detection
-        text_without_urls = url_pattern.sub('__URL__', message.content)
+        # Replace URLs and emojis with a placeholder to ignore them in lowercase detection
+        text_without_urls_and_emojis = url_and_emoji_pattern.sub('__IGNORED__', message.content)
         # Check for any lowercase words
-        has_lowercase = lowercase_pattern.search(text_without_urls) is not None
+        has_lowercase = lowercase_pattern.search(text_without_urls_and_emojis) is not None
 
 #Chequeea por lowercase. Putea solo con haber un solo caracter en lowercase. No jodan.
         if has_lowercase: 
