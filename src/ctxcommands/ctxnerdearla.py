@@ -38,7 +38,8 @@ async def nerdearlafunctx(ctx, texto):
         if texto.lower() in event.name.lower():
             event_info = {
                 "title": event.name,
-                "start": event.begin.strftime('%Y-%m-%d %H:%M')
+                "start": event.begin.strftime('%Y-%m-%d %H:%M'),
+                "description": event.description if event.description else "Link no dispobible"
             }
             lista_charlas.append(event_info)
 
@@ -48,13 +49,13 @@ async def nerdearlafunctx(ctx, texto):
     if lista_charlas:
         embedCharlas = discord.Embed(title="Proximas charlas en Nerdearla (5 max)", color=discord.Color.blue())
         for event in lista_charlas:
-            embedCharlas.add_field(name=event["title"], value=f"Fecha y Hora: {event['start']}", inline=False)
+            embedCharlas.add_field(name=event["title"], value=f"Fecha y Hora: {event['start']}\nLink Swapcard: {event['description']}", inline=False)
         
         # Enviamos todas las charlas encontradas en un solo mensaje
         await ctx.channel.send(embed=embedCharlas)
     else:
         # Si no hay charlas, enviamos un mensaje indicando que no se encontró nada
-        await ctx.send(f"No encontre charlas proximas en Nerdearla. para '{texto}'")
+        await ctx.send(f"No encontre charlas proximas en Nerdearla para '{texto}'")
 
     ###################### Bloque de busqueda en YouTube ######################
 
