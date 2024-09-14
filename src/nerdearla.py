@@ -39,7 +39,9 @@ async def nerdearlacharlasfunc(interaction, texto):
         if texto.lower() in event.name.lower():
             event_info = {
                 "title": event.name,
-                "start": event.begin.strftime('%Y-%m-%d %H:%M')
+                "start": event.begin.strftime('%Y-%m-%d %H:%M'),
+                "description": event.description if event.description else "Link no dispobible"
+
             }
             lista_charlas.append(event_info)
 
@@ -49,7 +51,7 @@ async def nerdearlacharlasfunc(interaction, texto):
     if lista_charlas:
         embedCharlas = discord.Embed(title="Próximas charlas en Nerdearla (5 max)", color=discord.Color.blue())
         for event in lista_charlas:
-            embedCharlas.add_field(name=event["title"], value=f"Fecha y Hora: {event['start']}", inline=False)
+            embedCharlas.add_field(name=event["title"], value=f"Fecha y Hora: {event['start']}\nLink Swapcard: {event['description']}", inline=False)
         
         await interaction.followup.send(embed=embedCharlas, ephemeral=True)
     else:
