@@ -4,6 +4,8 @@ import http.client
 import datetime
 from ratelimit import limits
 from discord.ext import commands
+import os
+from dotenv import load_dotenv
 
 quince_minutos = 900
 
@@ -26,6 +28,7 @@ async def fulbofunctx(ctx, liga):
         else:
 
             # Llama a la API - pasamos parametro de la fecha de hoy, y trae siempre los resultados de la ultima semana
+            FULBO_token = os.getenv('FULBO_token')
             connection = http.client.HTTPConnection('api.football-data.org')
             headers = { 'X-Auth-Token': f'{FULBO_token}' }
             connection.request('GET', f'/v4/competitions/{liga}/matches?dateFrom={fechadesde_string}&dateTo={fechapedida_string}', None, headers )
