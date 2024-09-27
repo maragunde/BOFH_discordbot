@@ -368,8 +368,8 @@ async def on_message(message):
             # Traemos el texto del mensaje y lo buscamos en la base
             textokarma = message.content.split()
             for texto in textokarma:
-                if texto.endswith("++") or texto.endswith("--"):
-          
+           #     if texto.endswith("++") or texto.endswith("--"):
+                if re.match(r'^[a-zA-Z0-9ñÑáéíóú]+(\+\+|\-\-)$', texto): # Este regex es feo pero anda     
                     palabra_base = texto[:-2]
 
                     # Buscamos y traemos el username externo <--- Esto es asi porque el bot siempre empieza los mensajes con el usuario
@@ -380,7 +380,6 @@ async def on_message(message):
                         
                     # Ejecuta query para verificar si la palabra existe en la DB
                     cursorkarma.execute("SELECT * FROM karma WHERE LOWER(palabra) = ?", (palabra_base.lower(),))
-                    print(palabra_base.lower())
                     existing_word = cursorkarma.fetchone()
 
                     # Ejecuta query para verificar si el usuario existe en la DB
@@ -392,7 +391,6 @@ async def on_message(message):
                                 
                             # Update word en la DB para karma++ y se imprime confirmacion
                             if texto.endswith("++"):
-                                print("This is a ++ word!")
                                 cursorkarma.execute("UPDATE karma SET karmavalue = karmavalue + 1 WHERE LOWER(palabra) = ?", (palabra_base.lower(),))
                                 databasekarma.commit()
                                 cursorkarma.execute("SELECT karmavalue FROM karma WHERE LOWER(palabra) = ?", (palabra_base.lower(),))
@@ -440,7 +438,7 @@ async def on_message(message):
                             cursorkarma.execute("SELECT karmavalue FROM karma WHERE palabra = ?", (palabra_base.lower(),))
                             updated_karma = cursorkarma.fetchone()[0]
                             print(f"Nueva palabra agregada a la DB. Karma++  para {palabra_base}")
-                            mensaje = f"+1 karma para {palabra_base}. Current karma is: {updated_karma.lower()} \n"
+                            mensaje = f"+1 karma para {palabra_base}. Current karma is: {updated_karma} \n"
 
                             # Chequeamos el autor del mensaje
                             if existing_user:
@@ -482,7 +480,7 @@ async def on_message(message):
             
             for texto in textokarma:
                 #if texto.endswith("++") or texto.endswith("--"):
-                if re.match(r'^[a-zA-Z0-9]+(\+\+|\-\-)$', texto):
+                if re.match(r'^[a-zA-Z0-9ñÑáéíóú]+(\+\+|\-\-)$', texto): # Este regex es feo pero anda
                     palabra_base = texto[:-2]
 
                     # Ejecuta query para verificar si la palabra y el usuario existen en la DB
