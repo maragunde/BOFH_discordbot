@@ -317,7 +317,7 @@ async def on_command_error(ctx, error):
     FechaActual = datetime.now()
 
     mensajeayuda_general = """Informacion general sobre los comandos del bot de Sysarmy       
-                        !dolar !cripto !euro !pesos !fulbo !clima !subte !underground !feriadoAR !feriadoCL !feriadoES !feriadoMX !feriadoUY !q !qsearch !qadd !rank !kgivers !kgiven !karma !nerdearla
+                        !dolar !cripto !euro !pesos !fulbo !clima !subte !underground !feriadoar !feriadocl !feriadoes !feriadomx !feriadouy !q !qsearch !qadd !rank !kgivers !kgiven !karma !nerdearla
                         Mas detalles en el canal #help-bot-commands de Discord, dentro de la seccion de Welcome! - o ejecutando /help desde Discord"""
 
 # Custom error handling - si !help se manda vacio sin especificar comando, manda un mensaje de ayuda general
