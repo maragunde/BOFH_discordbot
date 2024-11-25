@@ -10,7 +10,7 @@ async def helpfunctx(ctx, texto):
     if texto is None:
         
         mensajeayuda_general = """Informacion general sobre los comandos del bot de Sysarmy       
-                          !dolar !cripto !euro !fulbo !pesos !clima !subte !underground !feriadoAR !feriadoCL !feriadoES !feriadoMX !feriadoUY !q !qsearch !qadd !rank !kgivers !kgiven !karma !birras !flip !shrug !nerdearla
+                          !dolar !cripto !euro !fulbo !pesos !clima !subte !underground !feriadoar !feriadocl !feriadoes !feriadomx !feriadouy !q !qsearch !qadd !rank !kgivers !kgiven !karma !birras !flip !shrug !nerdearla !jobs
                           Mas detalles en el canal #help-bot-commands de Discord, dentro de la seccion de Welcome! - o ejecutando /help desde Discord"""
         await ctx.send(mensajeayuda_general)
    
@@ -64,6 +64,9 @@ async def helpfunctx(ctx, texto):
 
     elif texto == "nerdearla":
       await ctx.send("Pone !nerdearla para consultar charlas subidas a YouTube y agenda de Nerdearla en base a un texto. Ej: '!nerdearla kubernetes'")
+
+    elif texto == "jobs":
+      await ctx.send("Pone !jobs para consultar trabajos posteados por recruiters en nuestro canal de jobs. Ej: '!jobs backend'")
 
     # Log
     print(FechaActual)
