@@ -42,7 +42,7 @@ Algunos comandos como los de Clima, Fulbo, Cripto, etc. usan calls de APIs gratu
 
 El comando help detalla instrucciones de uso para cada uno.
 
-Comandos incluidos en V1.0:
+Comandos incluidos:
 
  - De feriados    --> !feriadomx !feriadoar !feriadouy !feriadocl !feriadoes
  - Lifestyle      --> !underground !subte !clima !fulbo !flip !shrug
@@ -50,6 +50,7 @@ Comandos incluidos en V1.0:
  - Karma          --> !rank !karma !kgiven !kgivers
  - Quote          --> !q !qsearch !qadd
  - Comunidad      --> !birras !nerdearla
+ - Jobs           --> !jobs /jobsearch /jobpost (solo para rol recruiter)
 ---
 **SISTEMA DE KARMA**
 

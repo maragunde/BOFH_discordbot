@@ -43,7 +43,7 @@ async def nerdearlafunctx(ctx, texto):
             }
             lista_charlas.append(event_info)
 
-    lista_charlas = lista_charlas[:5] ## <-- limitamos a un maximo de 5
+    lista_charlas = lista_charlas[:5] # <-- limitamos a un maximo de 5 
 
     # Si encontramos charlas, las mandamos como embed (para evitar thumbnails molestos de Discord)
     if lista_charlas:

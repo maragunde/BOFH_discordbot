@@ -24,3 +24,4 @@ urllib3==2.2.1
 yarl==1.9.4
 zope.interface==6.3
 google-api-python-client==2.143.0
+feedparser==6.0.11

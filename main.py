@@ -6,7 +6,7 @@ import random, sqlite3
 from datetime import datetime
 from db.dbops import agregarusuario, sincronizarUsuarios
 import os
-from dotenv import load_dotenv # <-- Solo para las keys storeadas en venv
+from dotenv import load_dotenv
 import re
 
 
@@ -29,6 +29,9 @@ from src.karma import karmagiversfunc, karmarankfunc, karmauserfunc
 from src.help import helpfunc
 from src.quote import quotefunc, qsearchfunc
 from src.nerdearla import nerdearlacharlasfunc
+from src.postjob import JobPostModal
+from src.jobsearch import jobsearchfunc
+from src.shithappens import ShitHappens 
 
 # IMPORT DE COMANDOS VERSION SIMPLE (FUNCIONAN POR TEXTO USANDO FUNCION CTX.SEND) 
 from src.ctxcommands.ctxclima import climafunctx
@@ -49,6 +52,7 @@ from src.ctxcommands.ctxquote import quotefunctx, qsearchfunctx, quoteaddfunctx
 from src.ctxcommands.ctxsubte import subtefunctx
 from src.ctxcommands.ctxunderground import undergroundfunctx
 from src.ctxcommands.ctxnerdearla import nerdearlafunctx
+from src.ctxcommands.ctxjobsearch import jobsearchfunctx
                                               
                                                                     
 #                @@@@@@@@@@@@@    =@@@*     @@@@    +@@@@@@@@@@@@@   
@@ -170,6 +174,15 @@ async def on_ready():
     except Exception as e:
         print(e)
 
+################ FUNCION DE RSS PARA EL CANAL DE SHITHAPPENS ################
+    shitChannel = int(os.getenv('shitChannel'))
+    channel = bot.get_channel(shitChannel)
+
+    if isinstance(channel, discord.TextChannel):
+        ShitHappens(channel, bot)
+    else:
+        print("Error: El canal no es el indicado")
+
 ########################### BOT INITIAL SETUP ENDS ######################################################
 #########################################################################################################
 
@@ -201,7 +214,9 @@ async def on_reaction_add(reaction, user):
             # Operaciones de DB
             SQLkarmagiven = ("UPDATE usuarios SET karmagiven = karmagiven + 1 WHERE user_id = ?")
             cursor.execute(SQLkarmagiven, (user.id,))
-            await reaction.message.channel.send(f"+1 karma para {str(reaction.message.author)}")
+            mensaje = f"+1 karma para {str(reaction.message.author.display_name)} \n"
+            mensaje += f"+1 karmagiven para {user.name}"
+            await reaction.message.channel.send(mensaje)
 
         # Reaccion de Karma Down
         elif "kdown" in str(reaction):
@@ -211,7 +226,7 @@ async def on_reaction_add(reaction, user):
             # Operaciones de DB
             SQLkarmagiven = ("UPDATE usuarios SET karmagiven = karmagiven + 1 WHERE user_id = ?")
             cursor.execute(SQLkarmagiven, (user.id,))
-            await reaction.message.channel.send(f"-1 karma para {str(reaction.message.author)}")
+            await reaction.message.channel.send(f"-1 karma para {str(reaction.message.author.display_name)}")
 
     # Reaccion de Quote y agrega quote a la DB
     if "qadd" in str(reaction):
@@ -226,7 +241,7 @@ async def on_reaction_add(reaction, user):
             print(f"Date: {reaction.message.created_at}")
             SQLquote = ("INSERT INTO quotes (quote, username, date) VALUES (?, ?, ?)")
             cursorquotes.execute(SQLquote, (str(reaction.message.content), str(reaction.message.author), str(reaction.message.created_at)))
-            await reaction.message.channel.send(f"Quote de {str(reaction.message.author)} agregado: {str(reaction.message.content)} - cortesia de: {str(user)}")
+            await reaction.message.channel.send(f"Quote de {str(reaction.message.author.display_name)} agregado: {str(reaction.message.content)} - cortesia de: {str(user)}")
         else:
             await user.send("Error de capa 8. Este quote ya fue agregado anteriormente")
         
@@ -253,6 +268,7 @@ async def on_reaction_remove(reaction, user):
         # Reaccion de Karma Up
         if "kup" in str(reaction):
             print(FechaActual)
+            print("kup reaction removida")
             print("Karma -1")
             SQLkarma = ("UPDATE usuarios SET karma = karma - 1 WHERE user_id = ?")
 
@@ -260,11 +276,12 @@ async def on_reaction_remove(reaction, user):
             cursor.execute(SQLkarma, (reaction.message.author.id,))
             SQLkarmagiven = ("UPDATE usuarios SET karmagiven = karmagiven - 1 WHERE user_id = ?")
             cursor.execute(SQLkarmagiven, (user.id,))
-            await reaction.message.channel.send(f"karma++ removido para {str(reaction.message.author)}")
+            await reaction.message.channel.send(f"karma++ removido para {str(reaction.message.author.display_name)}")
         
         # Reaccion de Karma Down
         elif "kdown" in str(reaction):
             print(FechaActual)
+            print("kdown reaction removida")
             print("Karma +1")
             SQLkarma = ("UPDATE usuarios SET karma = karma + 1 WHERE user_id = ?")
 
@@ -715,12 +732,17 @@ async def flip(ctx):
 @bot.command()
 async def shrug(ctx):
     print(f"Se ha ejecutado el comando !flip")
-    await ctx.send("¯\_(ツ)_/¯")
+    await ctx.send("¯\\_(ツ)_/¯")
 
 # COMANDO NERDEARLA
 @bot.command()
 async def nerdearla(ctx, texto):
     await nerdearlafunctx(ctx, texto)
+
+# COMANDO JOB SEARCH
+@bot.command(name="jobs")
+async def jobs(ctx, texto):
+    await jobsearchfunctx(ctx, texto)
 
 #########################################################################################
 ################### LLAMADAS DE COMANDOS SLASH NATIVOS DISCORD (TREE) ###################
@@ -886,11 +908,29 @@ async def quotesearch(interaction: Interaction, texto:str):
 async def birras(interaction: Interaction):
     await interaction.response.send_message(embed= await birrasfunc(interaction))
 
-
 # COMANDO NERDEARLA
 @bot.tree.command(name="nerdearlacharlas", description="Busca charlas de Nerdearla en YouTube y agenda de evento")
 async def nerdearlacharlas(interaction: Interaction, texto:str):
     await nerdearlacharlasfunc(interaction, texto)
+
+# COMANDO JOB SEARCH
+@bot.tree.command(name="jobsearch", description="Busca posiciones posteadas por recruiters en nuestro canal de jobs")
+async def jobsearch(interaction: discord.Interaction, texto: str):
+    embed = await jobsearchfunc(interaction, texto)
+    await interaction.response.send_message(embed=embed)
+
+# COMANDO JOB POST
+@bot.tree.command(name="jobpost", description="Postear un job (solo rol recruiter)")
+async def jobpost(interaction: discord.Interaction):
+
+    # Chequeamos Rol Recruiter para ejecucion del comando
+    recruiter_role = discord.utils.get(interaction.guild.roles, name="Recruiter")
+    if recruiter_role not in interaction.user.roles:
+        await interaction.response.send_message("No tienes permisos para ejecutar este comando. Solo Recruiters pueden buscar posiciones.", ephemeral=True)
+        return
+    else:
+        await interaction.response.send_modal(JobPostModal())
+
 
 if __name__ == '__main__':
     main()
