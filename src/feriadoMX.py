@@ -13,7 +13,7 @@ async def feriadoMXfun(interaction):
     today = datetime.date.today()
     
     # Llama a la API
-    response = requests.get("https://date.nager.at/api/v3/PublicHolidays/2024/MX")
+    response = requests.get("https://date.nager.at/api/v3/PublicHolidays/2025/MX")
     try:
         if response.status_code == 200:
            

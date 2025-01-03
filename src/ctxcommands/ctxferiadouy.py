@@ -12,7 +12,7 @@ async def feriadouyfunctx(ctx):
     today = datetime.date.today()
     
     # Llama a la API
-    response = requests.get("https://date.nager.at/api/v3/PublicHolidays/2024/UY")
+    response = requests.get("https://date.nager.at/api/v3/PublicHolidays/2025/UY")
     try:
         if response.status_code == 200:
             
