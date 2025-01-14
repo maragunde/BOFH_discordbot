@@ -2,10 +2,10 @@ import feedparser
 import time
 import threading
 import asyncio
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+from dateutil import parser
 import html
 import re
-
 
 ##################################################################################################################
 ##############################################  SHITHAPPENS ######################################################
@@ -50,6 +50,7 @@ class RSSFeed:
 
     # FUNCION PRINCIPAL
     def fetch_and_send(self):
+        FechaActual = datetime.now(timezone.utc) # Para log y comparacion de fecha
         while True:
 
             # Traemos los posts del listado de RSS
@@ -69,29 +70,33 @@ class RSSFeed:
                             published = getattr(latest_entry, 'published', 'No published date available')
                             summary = getattr(latest_entry, 'summary', None)
 
-                            # Formatea el summary y le sacamos el HTML
-                            if summary:
-                                summary = self.format_summary(summary)
+                            # Formatea el summary y le sacamos el HTML y chequeamos la fecha del post
+                            try:
+                                parsed_date = parser.parse(published)
+                                if summary and (FechaActual - parsed_date) <= timedelta(days=1):
+                                    summary = self.format_summary(summary)
 
-                            # Creamos el post
-                            main_title = f"**{source_title} Update**"
-                            message = f"**{main_title}**\n - {title}\nFecha: {published}\n"
-                            if summary:
-                                message += f"{summary}\n"
-                            message += f"[Leer más]({latest_entry.link})"
+                                    # Creamos el post
+                                    main_title = f"**{source_title} Update**"
+                                    message = f"**{main_title}**\n - {title}\nFecha: {published}\n"
+                                    if summary:
+                                        message += f"{summary}\n"
+                                    message += f"[Leer más]({latest_entry.link})"
 
-                            # Manda la funcion de send al loop de eventos del bot
-                            asyncio.run_coroutine_threadsafe(self.channel.send(message), self.bot.loop)
+                                    # Manda la funcion de send al loop de eventos del bot
+                                    asyncio.run_coroutine_threadsafe(self.channel.send(message), self.bot.loop)
 
-                            # Log
-                            FechaActual = datetime.now()
-                            print(FechaActual)
-                            print(f"New RSS post sent to #shithappens from {rss_url}")
+                                    # Log
+                                    print(FechaActual)
+                                    print(f"New RSS post sent to #shithappens from {rss_url}")
 
-                            # Actualizamos la ultima fecha de posteo
-                            self.last_post_time = current_time
+                                    # Actualizamos la ultima fecha de posteo
+                                    self.last_post_time = current_time
+                            except Exception as e:
+                                print(f"RSS feed from {rss_url} not published. No date available in RSS post")
+                                
 
-            time.sleep(30)  # Chequea todo el feed cada 30 segundos
+            time.sleep(20)  # Chequea todo el feed cada 20 segundos
 
 # Funcion principal para arrancar el RSS feed en un thread separado
 def ShitHappens(channel, bot):

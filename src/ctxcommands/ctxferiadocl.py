@@ -10,9 +10,10 @@ quince_minutos = 900
 @limits(calls=15, period=quince_minutos)
 async def feriadoclfunctx(ctx):
     today = datetime.date.today()
+    anio = datetime.date.today().year
     
     # Llama a la API
-    response = requests.get("https://date.nager.at/api/v3/PublicHolidays/2025/CL")
+    response = requests.get(f"https://date.nager.at/api/v3/PublicHolidays/{anio}/CL")
     try:
         if response.status_code == 200:
           
