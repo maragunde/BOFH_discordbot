@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import requests
 import discord
 from discord import Embed
@@ -22,12 +22,10 @@ async def birrasfunc(interaction):
 
         # Convertimos las timezones para poder compararlas
         evento_UTC = event.begin.datetime.astimezone(timezone.utc)
+        evento_GMT3 = event.begin.datetime.astimezone(timezone(timedelta(hours=-3)))
 
         if evento_UTC > FechaActual:
             eventosformateados = True 
-            
-            # Formateo de fecha
-            fechaformateada = evento_UTC.strftime("%d-%m-%Y %H:%M")
 
             # Limpiamos el codigo feo que mete Google Calendar + sacamos la referencia del adminbirrator
             description = re.sub(r'<a href=\'(.*?)\'>.*?</a>', r'\1', event.description)
@@ -38,7 +36,7 @@ async def birrasfunc(interaction):
                 eventosformateados = True
 
                 # Formateo de fecha
-                fechaformateada = evento_UTC.strftime("%d-%m-%Y %H:%M")
+                fechaformateada = evento_GMT3.strftime("%d-%m-%Y %H:%M")
                 
                 # Appendeamos el evento para el embed
                 embed_fields.append((event.name, fechaformateada, description))

@@ -21,13 +21,13 @@ class JobPostModal(discord.ui.Modal, title="Postear nuevo job"):
     async def on_submit(self, interaction: discord.Interaction):
         FechaActual = datetime.now()
 
-        # Check y manejo de fecha para que solo pueda postear 1 vez por dia
+        # Check y manejo de fecha para que solo pueda postear x veces por dia
         user_id = interaction.user.id
         if user_id in user_last_post_time:
             last_post_time = user_last_post_time[user_id]
 
-            if FechaActual - last_post_time < timedelta(days=1):
-                await interaction.response.send_message("Solo puedes postear una vez por día. Intentalo de nuevo más tarde.", ephemeral=True)
+            if FechaActual - last_post_time < timedelta(days=3):
+                await interaction.response.send_message("La cantidad de posteos diarios han sido limitados. Intentalo de nuevo más tarde.", ephemeral=True)
                 return
 
         # Traemos el canal de foro y verificamos que se postee correctamente (los thread channels funcionan distinto)

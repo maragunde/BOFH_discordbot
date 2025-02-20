@@ -137,7 +137,7 @@ venv.bak/
 db/*.txt
 db/discordusrs.db
 db/karma.db
-deb/quotes.db
+db/quotes.db
 
 # Spyder project settings
 .spyderproject
