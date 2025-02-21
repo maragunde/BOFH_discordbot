@@ -356,6 +356,7 @@ async def on_message(message):
     cursorkarma = databasekarma.cursor()
     databaseusers = sqlite3.connect('db/discordusrs.db')
     cursorusers = databaseusers.cursor()
+    cursorupdateusers = databaseusers.cursor()    
 
     palabra_base = None
 
@@ -500,8 +501,9 @@ async def on_message(message):
                 if re.match(r'^[a-zA-Z0-9ñÑáéíóú]+(\+\+|\-\-)$', texto): # Este regex es feo pero anda
                     palabra_base = texto[:-2]
 
-                    # Ejecuta query para verificar si la palabra y el usuario existen en la DB
+                    # Ejecuta query para verificar: si la palabra existe ||| Si el usuario existe || Si el usuario se cambio el nombre de Discord (en ese caso lo actualiza)
                     cursorusers.execute("SELECT * FROM usuarios WHERE username = ?", (message.author.name,))
+                    cursorupdateusers.execute("UPDATE usuarios SET username = ? WHERE user_id = ? AND username != ?", (message.author.name, message.author.id, message.author.name))
                     cursorkarma.execute("SELECT * FROM karma WHERE LOWER(palabra) = ?", (palabra_base.lower(),))
                     existing_word = cursorkarma.fetchone()
                     

@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import requests
 from ics import Calendar
 import re
@@ -15,11 +15,9 @@ async def birrasfunctx(ctx):
     for event in calendar.events:
         # Convertimos las timezones para poder compararlas
         evento_UTC = event.begin.datetime.astimezone(timezone.utc)
+        evento_GMT3 = event.begin.datetime.astimezone(timezone(timedelta(hours=-3)))
 
         if evento_UTC > FechaActual:
-            
-            # Formateo de fecha
-            fechaformateada = evento_UTC.strftime("%d-%m-%Y %H:%M")
 
             # Limpiamos el codigo feo que mete Google Calendar + sacamos la referencia del adminbirrator
             description = re.sub(r'<a href=\'(.*?)\'>.*?</a>', r'\1', event.description)
@@ -28,9 +26,9 @@ async def birrasfunctx(ctx):
             # Busca 'birras' en el evento
             if 'birras' in event.name.lower() or 'birras' in description.lower():
                 # Formateo de fecha
-                fechaformateada = evento_UTC.strftime("%d-%m-%Y %H:%M")
+                fechaformateada = evento_GMT3.strftime("%d-%m-%Y %H:%M")
 
-                evento = f"**Nombre:** {event.name}\n**Cuando:** {fechaformateada}\n**Descripcion:** {description}\n\n"
+                evento = f"**Nombre:** {event.name}\n**Cuando:** {fechaformateada} \n**Descripcion:** {description}\n\n"
                 eventosformateados += evento
 
     if eventosformateados:
