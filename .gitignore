@@ -139,6 +139,9 @@ db/discordusrs.db
 db/karma.db
 db/quotes.db
 
+# DB / Log
+src/discordjobs/bulk
+
 # Spyder project settings
 .spyderproject
 .spyproject
