@@ -139,6 +139,14 @@ db/discordusrs.db
 db/karma.db
 db/quotes.db
 
+# Jobs files
+src/discordjobs/bulk/*.txt
+src/discordjobs/bulk/*.json
+src/discordjobs/bulk/*.xlsx
+src/discordjobs/bulk/*.xls
+src/discordjobs/*.txt
+src/discordjobs/*.json
+
 # Spyder project settings
 .spyderproject
 .spyproject
