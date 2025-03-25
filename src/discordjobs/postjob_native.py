@@ -27,7 +27,7 @@ class JobPostModal(discord.ui.Modal, title="Postear nuevo job"):
             last_post_time = user_last_post_time[user_id]
 
             if FechaActual - last_post_time < timedelta(days=3):
-                await interaction.response.send_message("La cantidad de posteos diarios han sido limitados. Intentalo de nuevo más tarde.", ephemeral=True)
+                await interaction.response.send_message("Discord Jobs - ⚠️ La cantidad de posteos diarios han sido limitados. Intentalo de nuevo más tarde.", ephemeral=True)
                 return
 
         # Traemos el canal de foro y verificamos que se postee correctamente (los thread channels funcionan distinto)
@@ -89,7 +89,7 @@ class TagSelectView(discord.ui.View):
         # Verificamos la longitud antes de intentar postear el thread
         if len(thread_content) > 2000:
             await interaction.response.send_message(
-                f"El contenido total supera el límite de 2000 caracteres (actual: {len(thread_content)}). "
+                f"Discord Jobs - ⚠️ El contenido total supera el límite de 2000 caracteres (actual: {len(thread_content)}). "
                 "Por favor, acorta algunos campos.",
                 ephemeral=True
             )
@@ -110,7 +110,7 @@ class TagSelectView(discord.ui.View):
         print(f"Se ha ejecutado el comando /jobpost por {interaction.user}")
 
         # Confirmación al usuario
-        await interaction.response.send_message(f"Posición posteada exitosamente! Revisa el job board", ephemeral=True)
+        await interaction.response.send_message(f"Discord Jobs - 📢 Posición posteada exitosamente! Revisa el job board", ephemeral=True)
 
 
 # DEFINICION DEL DROPDOWN PARA SELECCION DE TAGS
@@ -135,4 +135,4 @@ class TagSelect(discord.ui.Select):
         if isinstance(self.view, TagSelectView):
             await self.view.complete_post(interaction, self.values)
         else:
-            await interaction.response.send_message("Error, algo pinchó. Por favor contactar a admin.", ephemeral=True)
+            await interaction.response.send_message("Discord Jobs - ❌ Error, algo pinchó. Por favor contactar a admin.", ephemeral=True)

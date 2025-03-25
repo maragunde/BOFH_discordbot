@@ -1,7 +1,7 @@
 
 BOFH - Discord community bot for Sysarmy
 
-Version 1.2 - Sep 2024
+Version 1.5 - Mar 2025
 
 by @Qwuor01 and @aragunde
 
@@ -50,7 +50,7 @@ Comandos incluidos:
  - Karma          --> !rank !karma !kgiven !kgivers
  - Quote          --> !q !qsearch !qadd
  - Comunidad      --> !birras !nerdearla
- - Jobs           --> !jobs /jobsearch /jobpost (solo para rol recruiter)
+ - Jobs           --> !jobs /jobsearch
 ---
 **SISTEMA DE KARMA**
 
@@ -88,3 +88,18 @@ El sistema de quotes funciona de una forma similar al de Karma. Se quotea un men
 ***!q*** se utiliza para traer un quote aleatorio del historial
 ***!qsearch*** se utiliza para traer un quote en base a un keyword (incluyendo usuario)
 ***!qsearch*** se utiliza para quotear via texto y siguiendo un formato especifico ungido por el oraculo legendario de Sysarmy.
+
+
+---
+**SISTEMA DE JOBS**
+
+
+Desde la version 1.5 implementamos un sistema de posteo de posiciones laborales en discord. Aquellos usuarios promovidos al rol "Recruiter" pueden postear jobs en un Forum channel mediante tres formas:
+
+ 1) Usando el comando /jobpost que dispara un form Modal (individuales)
+ 2) Mediante un Google Form - conexion externa via Google Sheet API (individuales)
+ 3) En bulk mediante un archivo xlsx
+ 
+ - Si bien los metodos (2) y (3) se corren automaticamente con un croncito, tambien esta la posibilidad de que Discord admins ejecuten el posteo mediante los comandos /gformjobpost y /bulkjobpost
+
+ Todo el sistema de posteo de jobs esta en .src/discordjobs/

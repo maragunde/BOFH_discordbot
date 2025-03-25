@@ -9,7 +9,6 @@ import os
 from dotenv import load_dotenv
 import re
 
-
 # IMPORT DE COMANDOS TREE (NATIVOS DISCORD)
 from src.londonUnderground import Lines
 from src.subteBA import SubteBA
@@ -29,9 +28,14 @@ from src.karma import karmagiversfunc, karmarankfunc, karmauserfunc
 from src.help import helpfunc
 from src.quote import quotefunc, qsearchfunc
 from src.nerdearla import nerdearlacharlasfunc
-from src.postjob import JobPostModal
+from src.shithappens import ShitHappens
+
+#IMPORT DE FUNCIONES PARA SISTEMA DE JOBS
 from src.jobsearch import jobsearchfunc
-from src.shithappens import ShitHappens 
+from src.discordjobs.postjob_native import JobPostModal
+from src.discordjobs.postjob_bulk import bulkjobpost
+from src.discordjobs.postjob_gform_convert import checkforjobs
+from src.discordjobs.postjob_gform import gformjobpost
 
 # IMPORT DE COMANDOS VERSION SIMPLE (FUNCIONAN POR TEXTO USANDO FUNCION CTX.SEND) 
 from src.ctxcommands.ctxclima import climafunctx
@@ -53,46 +57,19 @@ from src.ctxcommands.ctxsubte import subtefunctx
 from src.ctxcommands.ctxunderground import undergroundfunctx
 from src.ctxcommands.ctxnerdearla import nerdearlafunctx
 from src.ctxcommands.ctxjobsearch import jobsearchfunctx
-                                              
-                                                                    
-#                @@@@@@@@@@@@@    =@@@*     @@@@    +@@@@@@@@@@@@@   
-#               @@@@@@@@@@@@@@    @@@@     @@@@.    @@@@@@@@@@@@@.   
-#               @@@@             =@@@-     @@@@    +@@@.             
-#              @@@@@@@@@@@@@%    @@@@@@@@@@@@@.    @@@@@@@@@@@@@     
-#              @@@@@@@@@@@@@    :@@@@@@@@@@@@@    =@@@@@@@@@@@@@     
-#                       @@@%             +@@@:             *@@@      
-#             @@@@@@@@@@@@@    :@@@@@@@@@@@@@    =@@@@@@@@@@@@@      
-#            :-------------    -------------.    -------------.      
-#                                                                    
-#                                                                    
-#           @@@@@@@@@@@@@    .@@@@@@@@@@@@@    :@@@@@@@@@@@@@        
-#          @@@@@@@@@@@@@@    @@@@@@@@@@@@@=    @@@@@@@@@@@@@-        
-#          @@@@     @@@@    :@@@      @@@@    :@@@@@@@@@@@@@         
-#         @@@@@@@@@@@@@@    @@@# @@@@@@@@=    @@@@@@@@@@@@@-         
-#         @@@@@@@@@@@@@    :@@@  @@@         :@@@@@@@@@@@@@          
-#        @@@@.     @@@@    @@@@ @@@@@@@@=    @@@@@@@@@@@@@-          
-#        @@@@     @@@@    .@@@  @@@@@@@@    :@@@@@@@@@@@@@           
-#       :-------------    -------------.    -------------.                                                                
-#                                                                    
-#                                                                    
-#      @@@@@@@@@@@@@     @@@@@@@@@@@@@    .@@@%     @@@@             
-#     %@@@@@@@@@@@@@    @@@+-@@@%-@@@#    @@@@     #@@@=             
-#     @@@@@@@@@@@@@     @@@ .@@@  @@@     @@@@@@@@@@@@@              
-#    %@@@@@@@@@@@@@    @@@- @@@* @@@#    @@@@@@@@@@@@@+              
-#    @@@@@@@@@@@@@     @@@  @@@  @@@              @@@@               
-#  #@@@@@@@@@@@@@    @@@= @@@% @@@#    @@@@@@@@@@@@@*               
-#   @@@@@@@@@@@@@    .@@@  @@@  @@@     @@@@@@@@@@@@@                
-#  :-------------    -------------.    -------------.                                       
+                                                                 
 
 # BOFH - Discord community bot for Sysarmy
-# Version 1.0 - April / May 2024
+# Version 2.1 - Feb 2025
 # by @Qwuor01 and @aragunde
 # License GPL v2 - Ver LICENSE en repositorio                       
 ###########################################################################################################
 ########################### BOT INITIAL SETUP BEGINS ######################################################
 
-# Definimos a bot
 load_dotenv()
+monitoring_task = None # Para Discord Jobs
+
+# Definimos a bot
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
@@ -108,6 +85,8 @@ def get_prefix(bot, message):
     return '!'
 
 bot = commands.Bot(command_prefix=get_prefix, intents=intents, help_command=None)
+
+# FUNCION PRINCIPAL PARA ARRANCAR EL BOT 
 def main() -> None:
     bot.run(f'{BOT_token}')
 
@@ -168,11 +147,13 @@ async def on_ready():
    ...........     ..  ...  ..     ............     
           
           BOFH bot is ready to pwn!""") 
+
     try:
         synced = await bot.tree.sync()
         print(f"Se sincronizaron {len(synced)} comandos slash")
     except Exception as e:
         print(e)
+
 
 ################ FUNCION DE RSS PARA EL CANAL DE SHITHAPPENS ################
     shitChannel = int(os.getenv('shitChannel'))
@@ -182,6 +163,7 @@ async def on_ready():
         ShitHappens(channel, bot)
     else:
         print("Error: El canal no es el indicado")
+
 
 ########################### BOT INITIAL SETUP ENDS ######################################################
 #########################################################################################################
@@ -921,7 +903,7 @@ async def jobsearch(interaction: discord.Interaction, texto: str):
     embed = await jobsearchfunc(interaction, texto)
     await interaction.response.send_message(embed=embed)
 
-# COMANDO JOB POST
+# COMANDO JOB POST (NATIVO DISCORD)
 @bot.tree.command(name="jobpost", description="Postear un job (solo rol recruiter)")
 async def jobpost(interaction: discord.Interaction):
 
@@ -932,6 +914,49 @@ async def jobpost(interaction: discord.Interaction):
         return
     else:
         await interaction.response.send_modal(JobPostModal())
+
+
+# COMANDO BULK JOB POST (VIA EXCEL FILE)
+@bot.tree.command(name="bulkjobpost", description="Posteo de jobs en bulk (root only)")
+async def command_bulkjobpost(interaction: discord.Interaction):
+
+     # Solo Root puede ejecutar este comando
+    recruiter_role = discord.utils.get(interaction.guild.roles, name="root")
+    if recruiter_role not in interaction.user.roles:
+        await interaction.response.send_message("No tienes permisos para ejecutar este comando.", ephemeral=True)
+        return
+    else:
+        await bulkjobpost(interaction)
+
+# COMANDO GOOGLE FORM JOB POST (VIA SPREADSHEET DE GOOGLE FORM)
+@bot.tree.command(name="gformjobpost", description="Posteo de jobs via Google Form (root only)")
+async def check_and_post_jobs(interaction: discord.Interaction):
+
+    # Solo Root puede ejecutar este comando
+    recruiter_role = discord.utils.get(interaction.guild.roles, name="root")
+    if recruiter_role not in interaction.user.roles:
+        await interaction.response.send_message("No tienes permisos para ejecutar este comando.", ephemeral=True)
+        return
+
+    await interaction.response.send_message("Discord Jobs (Gform) - 🔍 Buscando nuevos job requests...", ephemeral=True)
+    
+    # Chequea nuevos jobs en la sheet de respuestas de Google Form
+    new_jobs = await checkforjobs()
+    
+    if not new_jobs:
+        await interaction.followup.send("Discord Jobs (Gform) - ℹ️ No encontre ningun job nuevo", ephemeral=True)
+        return
+    
+    # Postea los jobs nuevos en Discord
+    jobs_posted = 0
+    for job_data in new_jobs:
+        try:
+            await gformjobpost(bot, job_data)
+            jobs_posted += 1
+        except Exception as e:
+            print(f"Discord Jobs (Gform) - ❌ Error posteando job: {e}")
+    
+    await interaction.followup.send(f"Discord Jobs (Gform) - ✅ Publique {jobs_posted} jobs!", ephemeral=True)
 
 
 if __name__ == '__main__':
