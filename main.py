@@ -921,8 +921,8 @@ async def jobpost(interaction: discord.Interaction):
 async def command_bulkjobpost(interaction: discord.Interaction):
 
      # Solo Root puede ejecutar este comando
-    recruiter_role = discord.utils.get(interaction.guild.roles, name="root")
-    if recruiter_role not in interaction.user.roles:
+    root_role = discord.utils.get(interaction.guild.roles, name="root")
+    if root_role not in interaction.user.roles:
         await interaction.response.send_message("No tienes permisos para ejecutar este comando.", ephemeral=True)
         return
     else:
@@ -933,8 +933,8 @@ async def command_bulkjobpost(interaction: discord.Interaction):
 async def check_and_post_jobs(interaction: discord.Interaction):
 
     # Solo Root puede ejecutar este comando
-    recruiter_role = discord.utils.get(interaction.guild.roles, name="root")
-    if recruiter_role not in interaction.user.roles:
+    root_role = discord.utils.get(interaction.guild.roles, name="root")
+    if root_role not in interaction.user.roles:
         await interaction.response.send_message("No tienes permisos para ejecutar este comando.", ephemeral=True)
         return
 
