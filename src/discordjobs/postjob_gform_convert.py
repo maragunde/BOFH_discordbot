@@ -1,5 +1,4 @@
 import os
-import time
 import json
 from datetime import datetime
 from dotenv import load_dotenv
@@ -12,7 +11,6 @@ load_dotenv()
 jobs_gdrive_service = os.getenv('jobs_gdrive_service')
 jobs_sheetid = os.getenv('jobs_sheetid')
 jobs_sheetname = os.getenv('jobs_sheetname', 'Respuestas')
-jobs_interval = 600 # Va a chequear el Google Form por nuevas rows cada 10 minutos
 output_json = "src/discordjobs/gform_job.json"
 row_log = "src/discordjobs/DiscordJobsGform_log.txt"
 

@@ -15,7 +15,7 @@ async def bulkjobpost(interaction: discord.Interaction):
     # Procesamos los archivos de Excel antes de continuar
     print("Discord Jobs - ✅ Procesando archivos nuevos...")
     if not process_all_new_excels():
-        await interaction.followup.send("Discord Jobs - ⚠️ Hubo un error procesando los archivos nuevos.")
+        await interaction.followup.send("Discord Jobs - ⚠️ Advertencia. No hay archivos nuevos que procesar")
         return
 
     # Cargamos la data del JSON (ahora ya debería estar actualizado)
