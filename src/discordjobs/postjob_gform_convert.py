@@ -1,15 +1,10 @@
 import os
 import time
 import json
-import pickle
 from datetime import datetime
 from dotenv import load_dotenv
 from google.oauth2 import service_account
-from google.auth.transport.requests import Request
-from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-
-
 
 load_dotenv()
 
@@ -24,33 +19,25 @@ row_log = "src/discordjobs/DiscordJobsGform_log.txt"
 # Conecta a la API de Google Sheet
 def setup_sheets_service():
     try:
-        # Define the scopes your app needs
-        SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
-        creds = None
-
-        # The file token.pickle stores the user's access and refresh tokens
-        # Created automatically when the authorization flow completes for the first time
-        if os.path.exists('token.pickle'):
-            with open('token.pickle', 'rb') as token:
-                creds = pickle.load(token)
-
-        # If there are no (valid) credentials available, let the user log in
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                # Load the OAuth 2.0 credentials from your downloaded JSON file
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    jobs_gdrive_service, SCOPES)
-                creds = flow.run_local_server(port=0)
-
-            # Save the credentials for the next run
-            with open('token.pickle', 'wb') as token:
-                pickle.dump(creds, token)
-
-        # Create and return the service
-        return build('sheets', 'v4', credentials=creds, cache_discovery=False)
-
+        # Esto es para forzar las credenciales cada vez que se conecta a la API de Google, que es muy hinchapelotas
+        if os.path.exists(jobs_gdrive_service) and jobs_gdrive_service.endswith('.json'):
+            # En el caso de file path
+            with open(jobs_gdrive_service, 'r') as f:
+                service_account_info = json.load(f)
+            
+            credentials = service_account.Credentials.from_service_account_info(
+                service_account_info,
+                scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
+            )
+        else:
+            # En el caso de JSON string
+            credentials = service_account.Credentials.from_service_account_info(
+                json.loads(jobs_gdrive_service),
+                scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
+            )
+        
+        # Crea un servicio de conexion nuevo
+        return build('sheets', 'v4', credentials=credentials, cache_discovery=False)
     except Exception as e:
         print(f"Discord Jobs (Gform) - ❌ Error de autenticacion con Google Sheet: {e}")
         return None
