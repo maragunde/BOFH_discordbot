@@ -36,6 +36,7 @@ from src.discordjobs.postjob_native import JobPostModal
 from src.discordjobs.postjob_bulk import bulkjobpost
 from src.discordjobs.postjob_gform_convert import checkforjobs
 from src.discordjobs.postjob_gform import gformjobpost
+from src.tasks import scheduled_job_posting, scheduled_bulk_job_posting
 
 # IMPORT DE COMANDOS VERSION SIMPLE (FUNCIONAN POR TEXTO USANDO FUNCION CTX.SEND) 
 from src.ctxcommands.ctxclima import climafunctx
@@ -115,6 +116,14 @@ async def on_ready():
     guild = bot.get_guild(int(guild_id))
     all_members = guild.members
     await sincronizarUsuarios(all_members)
+
+    try:
+        scheduled_job_posting.start(bot)
+        scheduled_bulk_job_posting.start(bot)
+        print("Tareas programadas iniciadas - se ejecutarán cada 30 minutos")
+    except Exception as e:
+        print(f"Error al iniciar tareas programadas: {e}")
+        pass
 
     # BOFH starts
     FechaActual = datetime.now()
