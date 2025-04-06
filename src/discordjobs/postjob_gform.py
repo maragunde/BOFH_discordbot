@@ -40,6 +40,7 @@ async def gformjobpost(bot, job_data):
     job_scheme = job_data['job_scheme']
     location = job_data['location']
     experiencia = job_data['experiencia']
+    ingles = job_data['ingles']
 
     # Ponemos el job link en markdown para que no rompa
     job_link_markdown = f"{job_link}"
@@ -66,6 +67,8 @@ async def gformjobpost(bot, job_data):
         f"**Esquema:** {job_scheme}\n"
         f"------\n"
         f"**Experiencia:** {experiencia}\n"
+        f"------\n"
+        f"**Ingles:** {ingles}\n"
         f"------\n"
         f"**Publicado por:** {discord_mention}"
     )

@@ -34,7 +34,8 @@ EXPECTED_COLUMNS = [
     'job_description',# Descripción
     'job_scheme',     # Esquema
     'location',       # Ubicación
-    'experiencia'     # Experiencia
+    'experiencia',    # Experiencia
+    'ingles'          # Ingles
 ]
 
 # Convertimos a JSON y appendeamos los jobs

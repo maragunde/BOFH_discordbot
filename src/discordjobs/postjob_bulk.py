@@ -39,7 +39,7 @@ async def bulkjobpost(interaction: discord.Interaction):
     posted_count = 0
     for job_data in job_list:
         
-        if not job_data.get('job_title') or not job_data.get('company'): # Skipeamos jobs que no tengan pro lo menos un job title y la empresa
+        if not job_data.get('job_title') or not job_data.get('company'): # Skipeamos jobs que no tengan por lo menos un job title y la empresa
             continue
             
         job_title = job_data.get('job_title', 'Sin título')
@@ -52,6 +52,7 @@ async def bulkjobpost(interaction: discord.Interaction):
         job_scheme = job_data.get('job_scheme', 'No especificado')
         location = job_data.get('location', 'No especificada')
         experiencia = job_data.get('experiencia', 'No especificada')
+        ingles = job_data.get('ingles')
         print(job_link)
 
         # Convertimos las tags a objetos para poder appendearlos al post
@@ -80,6 +81,8 @@ async def bulkjobpost(interaction: discord.Interaction):
             f"------\n"
             f"**Experiencia:** {experiencia}\n"
             f"------\n"
+            f"**Ingles:** {ingles}\n"
+            f"------\n"
             f"**Publicado por:** {discord_mention}"
         )
 
@@ -98,6 +101,6 @@ async def bulkjobpost(interaction: discord.Interaction):
     # Mensaje de confirmacion
     await interaction.followup.send(f"Discord Jobs - ✅ Se han posteado {posted_count} jobs.")
     
-    # Limpiamos el JSON para poder procesar un neuvo batch
+    # Limpiamos el JSON para poder procesar un nuevo batch
     with open(job_file, "w", encoding="utf-8") as file:
         json.dump([], file)

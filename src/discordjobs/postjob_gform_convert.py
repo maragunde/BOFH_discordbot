@@ -49,7 +49,7 @@ def get_sheet_data(service, spreadsheet_id, sheet_name):
 
         result = service.spreadsheets().values().get(
             spreadsheetId=spreadsheet_id,
-            range=f"'{sheet_name}'!B:K"  # Trae solo las columnas que sirven del form. MOdificar si se modifica el form
+            range=f"'{sheet_name}'!B:L"  # Trae solo las columnas que sirven del form. Modificar si se modifica el form
         ).execute()
         return result.get('values', [])
     except Exception as e:
@@ -125,7 +125,8 @@ def convierte_json(headers, new_row):
             "job_description": new_row[6],
             "job_scheme": new_row[7],
             "location": new_row[8],
-            "experiencia": new_row[9]
+            "experiencia": new_row[9],
+            "ingles": new_row[10]
         }
     except IndexError:
         print("Discord Jobs (Gform) -❌ Error: El job tiene campos incompletos")
