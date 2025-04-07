@@ -97,6 +97,7 @@ async def scheduled_bulk_job_posting(bot):
             job_scheme = job_data.get("job_scheme", "No especificado")
             location = job_data.get("location", "No especificada")
             experiencia = job_data.get("experiencia", "No especificada")
+            ingles = job_data.get('ingles')
             print(f"Discord Jobs (Bulk Auto) - Procesando job: {job_title} - {company}")
 
             selected_tag_objects = [tag for tag in forum_channel.available_tags if tag.name.lower() in [t.lower() for t in tags]]
@@ -121,8 +122,10 @@ async def scheduled_bulk_job_posting(bot):
                 f"------\n"
                 f"**Experiencia:** {experiencia}\n"
                 f"------\n"
+                f"**Ingles:** {ingles}\n"
+                f"------\n"
                 f"**Publicado por:** {discord_mention}"
-            )
+                )
 
             # Posteamos el job en el foro
             try:
