@@ -99,6 +99,7 @@ Desde la version 1.5 implementamos un sistema de posteo de posiciones laborales 
  1) Usando el comando /jobpost que dispara un form Modal (individuales)
  2) Mediante un Google Form - conexion externa via Google Sheet API (individuales)
  3) En bulk mediante un archivo xlsx
+ 4) Comando /jobpost_deletold elimina todos los jobs mas antiguos a 30 dias
  
  - Si bien los metodos (2) y (3) se corren automaticamente con un croncito, tambien esta la posibilidad de que Discord admins ejecuten el posteo mediante los comandos /gformjobpost y /bulkjobpost
 

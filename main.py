@@ -3,7 +3,7 @@ import discord
 from discord import Intents, Client, Message, app_commands, Interaction, Embed, message, reaction
 from discord.ext import commands
 import random, sqlite3
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from db.dbops import agregarusuario, sincronizarUsuarios
 import os
 from dotenv import load_dotenv
@@ -966,6 +966,53 @@ async def check_and_post_jobs(interaction: discord.Interaction):
             print(f"Discord Jobs (Gform) - ❌ Error posteando job: {e}")
     
     await interaction.followup.send(f"Discord Jobs (Gform) - ✅ Publique {jobs_posted} jobs!", ephemeral=True)
+
+# COMANDO JOB POST PARA BORRAR OLD POSTS
+# Este comando se ejecuta para eliminar job posts con mas de 30 dias de antiguedad
+
+@bot.tree.command(name="jobpost_deleteold", description="Elimina job posts expirados (root only)")
+async def jobpost_purga(interaction: discord.Interaction):
+
+    # Solo Root puede ejecutar este comando
+    root_role = discord.utils.get(interaction.guild.roles, name="root")
+    if root_role not in interaction.user.roles:
+        await interaction.response.send_message("No tienes permisos para ejecutar este comando.", ephemeral=True)
+        return
+    
+    # Traemos el canal del tipo foro
+    JobsChannel = int(os.getenv('JobsChannel'))
+    forum_channel = bot.get_channel(JobsChannel)
+    await interaction.response.defer(ephemeral=True)
+
+    # Operacion de fecha (cuando se ejecuta el comando a mano)
+    fechahoy = datetime.now(timezone.utc)
+    fechaexpire = fechahoy - timedelta(days=30)
+    jobsborrados = []
+
+    # Traemos todos los threads (incluso los archivados automaticamente)
+    active_threads = list(forum_channel.threads)
+    archived_threads = [thread async for thread in forum_channel.archived_threads()]
+    all_threads = active_threads + archived_threads
+
+    # Buscamos los threads y los borramos
+    for thread in all_threads:
+        created_at = thread.created_at
+
+        if created_at < fechaexpire:
+            try:
+                if not thread.archived:
+                    await thread.edit(archived=True)
+
+                await thread.delete()
+                jobsborrados.append(thread)
+
+            except Exception as e:
+                print(f"Discord Jobs - ❌ Error borrando job expirado {thread.name}: {e}")
+
+    # Mensaje de confirmacion
+    print(fechahoy)
+    print(f"Se ha ejecutado el comando /jobpost_deletold. Elimine {len(jobsborrados)} jobs")
+    await interaction.followup.send(f"✅ Elimine {len(jobsborrados)} jobs mas antiguos que 30 dias.", ephemeral=True)
 
 
 if __name__ == '__main__':
