@@ -36,6 +36,7 @@ from src.discordjobs.postjob_native import JobPostModal
 from src.discordjobs.postjob_bulk import bulkjobpost
 from src.discordjobs.postjob_gform_convert import checkforjobs
 from src.discordjobs.postjob_gform import gformjobpost
+from src.tasks import scheduled_job_posting, scheduled_bulk_job_posting
 
 # IMPORT DE COMANDOS VERSION SIMPLE (FUNCIONAN POR TEXTO USANDO FUNCION CTX.SEND) 
 from src.ctxcommands.ctxclima import climafunctx
@@ -115,6 +116,14 @@ async def on_ready():
     guild = bot.get_guild(int(guild_id))
     all_members = guild.members
     await sincronizarUsuarios(all_members)
+
+    try:
+        scheduled_job_posting.start(bot)
+        scheduled_bulk_job_posting.start(bot)
+        print("Tareas programadas iniciadas - se ejecutarán cada 30 minutos")
+    except Exception as e:
+        print(f"Error al iniciar tareas programadas: {e}")
+        pass
 
     # BOFH starts
     FechaActual = datetime.now()
@@ -921,8 +930,8 @@ async def jobpost(interaction: discord.Interaction):
 async def command_bulkjobpost(interaction: discord.Interaction):
 
      # Solo Root puede ejecutar este comando
-    recruiter_role = discord.utils.get(interaction.guild.roles, name="root")
-    if recruiter_role not in interaction.user.roles:
+    root_role = discord.utils.get(interaction.guild.roles, name="root")
+    if root_role not in interaction.user.roles:
         await interaction.response.send_message("No tienes permisos para ejecutar este comando.", ephemeral=True)
         return
     else:
@@ -933,8 +942,8 @@ async def command_bulkjobpost(interaction: discord.Interaction):
 async def check_and_post_jobs(interaction: discord.Interaction):
 
     # Solo Root puede ejecutar este comando
-    recruiter_role = discord.utils.get(interaction.guild.roles, name="root")
-    if recruiter_role not in interaction.user.roles:
+    root_role = discord.utils.get(interaction.guild.roles, name="root")
+    if root_role not in interaction.user.roles:
         await interaction.response.send_message("No tienes permisos para ejecutar este comando.", ephemeral=True)
         return
 
