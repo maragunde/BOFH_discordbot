@@ -51,7 +51,7 @@ async def gformjobpost(bot, job_data):
     ]
 
     # Convertimos el ID a mention de discord. Si no hay ID de Discord, mandamos el del bot
-    discord_mention = f"<@{discord_id}>" if discord_id else "<@1235914603435790377>"
+    discord_mention = f"<@{discord_id}>" if discord_id else "<@710993904886874153>"
 
 
     # Body de contenido del post

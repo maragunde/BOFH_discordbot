@@ -63,7 +63,7 @@ async def bulkjobpost(interaction: discord.Interaction):
         # Convertimos el ID a mention de discord. Si no hay ID de Discord, mandamos el del bot
         try:
             discord_id = discord_id.strip()
-            discord_mention = f"<@{discord_id}>" if discord_id.isdigit() else "1235914603435790377"
+            discord_mention = f"<@{discord_id}>" if discord_id.isdigit() else "710993904886874153"
         except:
             discord_mention = "No especificado"
 
