@@ -25,10 +25,10 @@ async def scheduled_job_posting(bot):
     Args:
         bot (commands.Bot): La instancia del bot de Discord.
     """
-    print(f"{datetime.now()} - Ejecutando tarea programada de publicación de trabajos...")
     try:
-        new_jobs = await checkforjobs()
+        new_jobs = await checkforjobs(verbose=False)
         if new_jobs:
+            print(f"[Scheduled] {datetime.now()} - Nuevos trabajos encontrados en el Google Form")
             jobs_posted = 0
             for job_data in new_jobs:
                 try:
@@ -50,9 +50,8 @@ async def scheduled_bulk_job_posting(bot):
     Args:
         bot (commands.Bot): La instancia del bot de Discord.
     """
-    print(f"{datetime.now()} - Ejecutando tarea programada de publicación de trabajos (Bulk)...")
 
-    if not process_all_new_excels():
+    if not process_all_new_excels(verbose=False):
         return
 
     job_file = "src/discordjobs/bulk/job.json"
@@ -66,6 +65,8 @@ async def scheduled_bulk_job_posting(bot):
 
         if not job_list:
             return
+
+        print(f"[Scheduled] {datetime.now()} - Nuevos trabajos encontrados en formato Excel")
 
         JobsChannel = int(os.getenv("JobsChannel"))
         guild_id = int(os.getenv("guild_id"))

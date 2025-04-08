@@ -79,14 +79,15 @@ def get_sheet_data(service, spreadsheet_id, sheet_name):
         raise e
 
 # Traemos del log para chequear lo ulitmo procesado
-def ultimo_index_procesado():
+def ultimo_index_procesado(verbose=True):
     try:
         if os.path.exists(row_log):
             with open(row_log, 'r') as f:
                 content = f.read().strip()
                 if content:
                     index = int(content)
-                    print(f"Discord Jobs (Gform) - 📃 Última row procesada: {index}")
+                    if verbose:
+                        print(f"Discord Jobs (Gform) - 📃 Última row procesada: {index}")
                     return index
                 else:
                     print(f"Discord Jobs (Gform) - ⚠️ Fuck el log esta vacío! ya fue, arranco desde la row 1")
@@ -141,8 +142,9 @@ def save_json(data, filename):
 ################# MONITOREO DE NUEVAS ROWS EN GOOGLE SHEET #################
 # La ejecutamos con Asyncio
 
-async def checkforjobs():
-    print(f"Discord Jobs (Gform) - ✅ Buscando nuevos jobs en la sheet {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+async def checkforjobs(verbose=True):
+    if verbose:
+        print(f"Discord Jobs (Gform) - ✅ Buscando nuevos jobs en la sheet {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
     # Create un servicio nuevo de
     service = setup_sheets_service()
@@ -162,7 +164,8 @@ async def checkforjobs():
         headers = data[0]  # Salteamos los headers
         current_row_count = len(data)
         
-        print(f"Discord Jobs (Gform) - 📊 Filas totales: {current_row_count}, Última fila procesada: {last_processed_index}")
+        if verbose:
+            print(f"Discord Jobs (Gform) - 📊 Filas totales: {current_row_count}, Última fila procesada: {last_processed_index}")
         
         # Verifica las ultimas rows para encontrar jobs nuevos
         if current_row_count > last_processed_index:
@@ -183,7 +186,8 @@ async def checkforjobs():
             # Actualiza las ultimas filas procesadas solamente despues de haber procesado todas las nuevas
             guardaultimarow(current_row_count)
         else:
-            print(f"Discord Jobs (Gform) - ℹ️ No hay nuevos jobs para procesar")
+            if verbose:
+                print(f"Discord Jobs (Gform) - ℹ️ No hay nuevos jobs para procesar")
     
     except Exception as e:
         print(f"Discord Jobs (Gform) - ❌ Error: {e}")

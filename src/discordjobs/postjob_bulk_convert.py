@@ -97,14 +97,15 @@ def process_excel(file_path):
         return False
 
 # Labura todos los archivos nuevos
-def process_all_new_excels():
+def process_all_new_excels(verbose=True):
     processed_files = log_requests_procesados()
     all_excel_files = [f for f in os.listdir(JOBS_FOLDER) if f.endswith((".xls", ".xlsx"))]
     
     new_files = [f for f in all_excel_files if f not in processed_files]
 
     if not new_files:
-        print("Discord Jobs - ⚠️ No hay nuevos archivos que procesar.")
+        if verbose:
+            print("Discord Jobs - ⚠️ No hay nuevos archivos que procesar.")
         return False
     
     # Reseteamos el JSON para proces un nuevo batch

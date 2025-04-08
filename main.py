@@ -120,7 +120,7 @@ async def on_ready():
     try:
         scheduled_job_posting.start(bot)
         scheduled_bulk_job_posting.start(bot)
-        print("Tareas programadas iniciadas - se ejecutarán cada 30 minutos")
+        print("Tareas programadas iniciadas")
     except Exception as e:
         print(f"Error al iniciar tareas programadas: {e}")
         pass
