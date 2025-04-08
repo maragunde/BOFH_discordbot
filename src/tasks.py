@@ -15,7 +15,7 @@ from src.discordjobs.shortlink import create_shortlink
 # Se utiliza para ejecutar funciones de forma periódica, como la publicación de trabajos.
 
 
-@tasks.loop(minutes=30)
+@tasks.loop(minutes=10)
 async def scheduled_job_posting(bot):
     """
     Esta función se encarga de ejecutar la tarea programada de publicación de trabajos.
@@ -41,7 +41,7 @@ async def scheduled_job_posting(bot):
         print(f"Error ejecutando publicación de trabajos: {e}")
 
 
-@tasks.loop(minutes=30)
+@tasks.loop(minutes=10)
 async def scheduled_bulk_job_posting(bot):
     """
     Esta función se encarga de ejecutar la tarea programada de publicación de trabajos en bulk.
