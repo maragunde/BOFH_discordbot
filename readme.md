@@ -1,7 +1,7 @@
 
 BOFH - Discord community bot for Sysarmy
 
-Version 1.5 - Mar 2025
+Version 1.5 - Apr 2025
 
 by @Qwuor01 and @aragunde
 
@@ -19,12 +19,12 @@ Si tenes sugerencias para nuevos comandos, o mejorar los existentes, sentite lib
   
   
 
-Este bot funciona con la libreria de [discord.py](https://discordpy.readthedocs.io/en/stable/index.html). Este bot utiliza respuestas e interacciones en embed (si se ejecuta via slash commands) o con ctx (si se ejecuta via texto con el prefijo !). No usamos cogs porque es un quilombo. Algunos comandos funcionan de forma mas completa y linda via slash commands, pero tambien de forma mas simple via comandos con prefijo ! por la gente que se suma via IRC / slack / telegram porque reject modernity embrace tradition.
+Este bot funciona con la libreria de [discord.py](https://discordpy.readthedocs.io/en/stable/index.html). Usamos respuestas e interacciones en embed (si se ejecuta via slash commands) o con ctx (si se ejecuta via texto con el prefijo !). No usamos cogs porque es un quilombo. Algunos comandos funcionan de forma mas completa y linda via slash commands, pero tambien de forma mas simple via comandos con prefijo ! por la gente que se suma via IRC / slack / telegram porque reject modernity embrace tradition.
 
   
   
 
-Ademas usamos SQLite para guardar todos los usuarios del server y manejar puntajes de karma, quotes, etc. Lo hicimos asi porque sino no escala. Este bot esta pensado para un server con miles y miles de usuarios, por lo que se vuelve menester manejar la data de una forma mas estable y segura.
+Ademas usamos SQLite para guardar todos los usuarios del server y manejar puntajes de karma, quotes, etc (lo hicimos asi porque sino no escala). Este bot esta pensado para un server con miles y miles de usuarios, por lo que se vuelve menester manejar la data de una forma mas estable y segura.
 
 ---
 **DEPENDENCIAS Y LIBRERIAS**
@@ -36,7 +36,7 @@ Check requirements.txt
 ---
 **FUNCIONAMIENTO DE COMANDOS**
 
-Todos los comandos funcionan tanto como Discord slash commands como con el prefijo !: esto quiere decir que cualquier comando nuevo que se agregue en main va a ser sincronizado y cargado en la lista de slash commands disponibles al iniciar el bot. Pero si tambien se tiene que ejecutar con prefijo, se tiene que crear aparte (dentro de src/ctxcommands). Esto lo hacmos asi para simplificar la vida con el distinto manejo de variables entre "ctx" e "interaction" de Discord.
+Todos los comandos funcionan tanto como Discord slash commands como con el prefijo !: esto quiere decir que cualquier comando nuevo que se agregue en main va a ser sincronizado y cargado en la lista de slash commands disponibles al iniciar el bot. Pero si tambien se tiene que ejecutar con prefijo, se tiene que crear aparte (dentro de src/ctxcommands). Esto lo hacmos asi para simplificar la vida con el distinto manejo de variables entre "ctx" e "interaction" en Discord.py.
 
 Algunos comandos como los de Clima, Fulbo, Cripto, etc. usan calls de APIs gratuitas por una cuestion de presupuesto. Por ese motivo limitamos las API calls por una cuestion higienica. Esto se puede modificar y va a depender de la API que se use en cada caso.
 
@@ -49,17 +49,17 @@ Comandos incluidos:
  - Economia       --> !cripto !dolar !euro !pesos
  - Karma          --> !rank !karma !kgiven !kgivers
  - Quote          --> !q !qsearch !qadd
- - Comunidad      --> !birras !nerdearla
+ - Comunidad      --> !birras !nerdearla !help
  - Jobs           --> !jobs /jobsearch
 ---
 **SISTEMA DE KARMA**
 
 
-El sistema de Karma esta concebido para que los usuarios o  puedan recibir karma++ o karma--, y de esa manera tomarle el pulso (?) a la comunidad. Tambien  para hacer un reconocimiento a los miembros del server, cuando un usuario da karma++, se le adjudica +1 de 'karmagiven'.
+El sistema de Karma esta concebido para que los usuarios puedan recibir karma++ o karma--, y de esa manera tomarle el pulso (?) a la comunidad. Tambien para hacer un reconocimiento a los miembros del server, cuando un usuario da karma++, se le adjudica +1 de 'karmagiven'.
 
 Como funciona? Facil:
 
-Se puede dar karma al autor de un mensaje reaccionando con un emoji especifico en Dicord:
+Se puede dar karma al autor de un mensaje reaccionando con un emoji especifico en Discord:
 
  - Karma++ lo da el emoji ***:karmaup:***
  - Karma-- lo da el emoji ***:karmadown:***
@@ -94,13 +94,13 @@ El sistema de quotes funciona de una forma similar al de Karma. Se quotea un men
 **SISTEMA DE JOBS**
 
 
-Desde la version 1.5 implementamos un sistema de posteo de posiciones laborales en discord. Aquellos usuarios promovidos al rol "Recruiter" pueden postear jobs en un Forum channel mediante tres formas:
+Desde la version 1.5 implementamos un sistema de posteo de posiciones laborales en Discord. Aquellos usuarios promovidos al rol "Recruiter" pueden postear jobs en un Forum channel mediante tres formas:
 
  1) Usando el comando /jobpost que dispara un form Modal (individuales)
  2) Mediante un Google Form - conexion externa via Google Sheet API (individuales)
  3) En bulk mediante un archivo xlsx
  4) Comando /jobpost_deletold elimina todos los jobs mas antiguos a 30 dias
  
- - Si bien los metodos (2) y (3) se corren automaticamente con un croncito, tambien esta la posibilidad de que Discord admins ejecuten el posteo mediante los comandos /gformjobpost y /bulkjobpost
+ - Si bien los metodos (2) y (3) se corren automaticamente con tasks, tambien esta la posibilidad de que Discord admins ejecuten el posteo mediante los comandos /gformjobpost y /bulkjobpost
 
  Todo el sistema de posteo de jobs esta en .src/discordjobs/
