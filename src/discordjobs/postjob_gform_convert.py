@@ -148,7 +148,7 @@ async def checkforjobs(verbose=True):
     
     # Create un servicio nuevo de
     service = setup_sheets_service()
-    last_processed_index = ultimo_index_procesado()
+    last_processed_index = ultimo_index_procesado(verbose=verbose)
     new_jobs = []
     
     try:
