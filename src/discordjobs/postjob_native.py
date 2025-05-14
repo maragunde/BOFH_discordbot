@@ -112,6 +112,14 @@ class TagSelectView(discord.ui.View):
         # Confirmación al usuario
         await interaction.response.send_message(f"Discord Jobs - 📢 Posición posteada exitosamente! Revisa el job board", ephemeral=True)
 
+        # Confirmación al canal de Sysarmy
+        SysarmyChannel = int(os.getenv('SysarmyChannel'))
+        sysarmy_channel = discord.utils.get(interaction.guild.channels, id=SysarmyChannel)
+
+        if sysarmy_channel:
+            await sysarmy_channel.send(
+                f"Pala Alert  ⛏️ {self.job_title} - {self.company} --> {forum_channel.mention}"
+            )
 
 # DEFINICION DEL DROPDOWN PARA SELECCION DE TAGS
 class TagSelect(discord.ui.Select):
