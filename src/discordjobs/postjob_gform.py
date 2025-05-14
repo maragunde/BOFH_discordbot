@@ -25,9 +25,11 @@ async def fetch_json():
 
 async def gformjobpost(bot, job_data):
 
-    # Traemos el canal del tipo foro
-    JobsChannel = int(os.getenv('JobsChannel'))
+    # Traemos los canales
+    JobsChannel = int(os.getenv('SysarmyChannel'))
+    SysarmyChannel = int(os.getenv('JobsChannel'))
     forum_channel = bot.get_channel(JobsChannel)
+
 
     # Parseamos los datos del JSON
     job_title = job_data['job_title']
@@ -86,5 +88,8 @@ async def gformjobpost(bot, job_data):
 
     if confirm_channel:
         await confirm_channel.send(f"Discord Jobs - 📢 Nuevo job posteado via Google Forms: {job_title} - {company}\n🔗 {job_link}")
+
+    if SysarmyChannel:
+        await SysarmyChannel.send(f"Pala Alert  ⛏️  {job_title} - {company}\n🔗 {job_link}")
 
     print(f"Discord Jobs - 📢 Nuevo job posteado via Google Forms: {job_title} - {company}")
