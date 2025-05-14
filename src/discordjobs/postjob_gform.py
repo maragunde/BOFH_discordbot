@@ -26,8 +26,8 @@ async def fetch_json():
 async def gformjobpost(bot, job_data):
 
     # Traemos los canales
-    JobsChannel = int(os.getenv('SysarmyChannel'))
-    SysarmyChannel = int(os.getenv('JobsChannel'))
+    JobsChannel = int(os.getenv('JobsChannel'))
+    SysarmyChannel = int(os.getenv('SysarmyChannel'))
     forum_channel = bot.get_channel(JobsChannel)
 
 
