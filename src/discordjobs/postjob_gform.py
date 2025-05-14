@@ -91,6 +91,6 @@ async def gformjobpost(bot, job_data):
         await confirm_channel.send(f"Discord Jobs - 📢 Nuevo job posteado via Google Forms: {job_title} - {company}\n🔗 {job_link}")
 
     if sysarmy_channel:
-        await sysarmy_channel.send(f"Pala Alert  ⛏️  {job_title} - {company}\n🔗 {job_link}")
+        await sysarmy_channel.send(f"Pala Alert  ⛏️  {job_title} - {company} --> {forum_channel.mention}")
 
     print(f"Discord Jobs - 📢 Nuevo job posteado via Google Forms: {job_title} - {company}")
