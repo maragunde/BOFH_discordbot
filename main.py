@@ -29,6 +29,7 @@ from src.help import helpfunc
 from src.quote import quotefunc, qsearchfunc
 from src.nerdearla import nerdearlacharlasfunc
 from src.shithappens import ShitHappens
+from src.f1 import f1func
 
 #IMPORT DE FUNCIONES PARA SISTEMA DE JOBS
 from src.jobsearch import jobsearchfunc
@@ -58,6 +59,7 @@ from src.ctxcommands.ctxsubte import subtefunctx
 from src.ctxcommands.ctxunderground import undergroundfunctx
 from src.ctxcommands.ctxnerdearla import nerdearlafunctx
 from src.ctxcommands.ctxjobsearch import jobsearchfunctx
+from src.ctxcommands.ctxf1 import formula1ctxfunc
                                                                  
 
 # BOFH - Discord community bot for Sysarmy
@@ -308,7 +310,7 @@ async def on_command_error(ctx, error):
     FechaActual = datetime.now()
 
     mensajeayuda_general = """Informacion general sobre los comandos del bot de Sysarmy       
-                        !dolar !cripto !euro !pesos !fulbo !clima !subte !underground !feriadoar !feriadocl !feriadoes !feriadomx !feriadouy !q !qsearch !qadd !rank !kgivers !kgiven !karma !nerdearla
+                        !dolar !cripto !euro !pesos !fulbo !clima !subte !underground !feriadoar !feriadocl !feriadoes !feriadomx !feriadouy !q !qsearch !qadd !rank !kgivers !kgiven !karma !nerdearla !jobs !f1
                         Mas detalles en el canal #help-bot-commands de Discord, dentro de la seccion de Welcome! - o ejecutando /help desde Discord"""
 
 # Custom error handling - si !help se manda vacio sin especificar comando, manda un mensaje de ayuda general
@@ -321,11 +323,16 @@ async def on_command_error(ctx, error):
             print ("Se ha ejecutado el comando !help")
         
         elif ctx.command.name == "dolar":
-
             await dolarfunctx(ctx, None)
             # Log
             print(FechaActual)
             print ("Se ha ejecutado el comando !dolar")
+
+        elif ctx.command.name == "f1":
+            await ctx.send("No pasaste argumentos. Usa `!f1 temporada` o `!f1 carrera`.")
+            # Log
+            print(FechaActual)
+            print ("Se ha ejecutado el comando !f1")
 
         else:
             await ctx.send("Error en el comando. No pasaste argumentos.")
@@ -737,6 +744,11 @@ async def nerdearla(ctx, texto):
 async def jobs(ctx, texto):
     await jobsearchfunctx(ctx, texto)
 
+# COMANDO F1
+@bot.command()
+async def f1(ctx, texto):
+    await formula1ctxfunc(ctx, texto)
+
 #########################################################################################
 ################### LLAMADAS DE COMANDOS SLASH NATIVOS DISCORD (TREE) ###################
 
@@ -911,6 +923,30 @@ async def nerdearlacharlas(interaction: Interaction, texto:str):
 async def jobsearch(interaction: discord.Interaction, texto: str):
     embed = await jobsearchfunc(interaction, texto)
     await interaction.response.send_message(embed=embed)
+
+# COMANDO FORMULA 1
+@bot.tree.command(name="formula1", description="Trae las posiciones de la temporada de la F1")
+
+# Esto es para elegir la opcion de resultado (temporada o ultima carrera)
+@app_commands.describe(opcion="Elegir resultados")
+@app_commands.choices(opcion=[
+    app_commands.Choice(name="temporada", value="temporada"),
+    app_commands.Choice(name="carrera", value="carrera")
+])
+async def formula1(interaction: discord.Interaction, opcion: app_commands.Choice[str]):
+    await interaction.response.defer()
+    response = await f1func(interaction, opcion.value)
+
+    if response:
+        # Parte el mensaje en caso de que supere los 2000 caracteres
+        if len(response) > 2000:
+            chunks = [response[i:i+1990] for i in range(0, len(response), 1990)]
+            for chunk in chunks:
+                await interaction.followup.send(chunk)
+        else:
+            await interaction.followup.send(response)
+    else:
+        await interaction.followup.send("❌ Hubo un error o el mensaje estaba vacío.", ephemeral=True)
 
 # COMANDO JOB POST (NATIVO DISCORD)
 @bot.tree.command(name="jobpost", description="Postear un job (solo rol recruiter)")
