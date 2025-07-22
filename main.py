@@ -925,7 +925,7 @@ async def jobsearch(interaction: discord.Interaction, texto: str):
     await interaction.response.send_message(embed=embed)
 
 # COMANDO FORMULA 1
-@bot.tree.command(name="formula1", description="Trae las posiciones de la temporada de la F1")
+@bot.tree.command(name="formula1", description="Trae las posiciones de la F1")
 
 # Esto es para elegir la opcion de resultado (temporada o ultima carrera)
 @app_commands.describe(opcion="Elegir resultados")
@@ -940,13 +940,13 @@ async def formula1(interaction: discord.Interaction, opcion: app_commands.Choice
     if response:
         # Parte el mensaje en caso de que supere los 2000 caracteres
         if len(response) > 2000:
-            chunks = [response[i:i+1990] for i in range(0, len(response), 1990)]
-            for chunk in chunks:
-                await interaction.followup.send(chunk)
+            partes = [response[i:i+1990] for i in range(0, len(response), 1990)]
+            for parte in partes:
+                await interaction.followup.send(parte, ephemeral=True)
         else:
-            await interaction.followup.send(response)
+            await interaction.followup.send(response, ephemeral=True)
     else:
-        await interaction.followup.send("❌ Hubo un error o el mensaje estaba vacío.", ephemeral=True)
+        await interaction.followup.send("Hubo un error o el mensaje estaba vacío.", ephemeral=True)
 
 # COMANDO JOB POST (NATIVO DISCORD)
 @bot.tree.command(name="jobpost", description="Postear un job (solo rol recruiter)")
