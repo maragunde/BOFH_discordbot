@@ -612,7 +612,7 @@ async def on_message(message):
                 lines = file.readlines()
             await message.reply(random.choice(lines).strip())
 
-# Fin de todo, se va el mensaje a ser procesado por los comandos.        
+# Fin de todo, se va el mensaje a ser procesado por los comandos.         
     await bot.process_commands(message) # <-- No tocar esto jamas o rompe los comandos on_message. Siempre dejar al final de la funcion on_message
 
 #########################################################################################
