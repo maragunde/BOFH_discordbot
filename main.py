@@ -31,6 +31,7 @@ from src.quote import quotefunc, qsearchfunc
 from src.nerdearla import nerdearlacharlasfunc
 from src.shithappens import ShitHappens
 from src.f1 import f1func
+from src.mundial import mundialfun
 
 #IMPORT DE FUNCIONES PARA SISTEMA DE JOBS
 from src.jobsearch import jobsearchfunc
@@ -62,6 +63,7 @@ from src.ctxcommands.ctxunderground import undergroundfunctx
 from src.ctxcommands.ctxnerdearla import nerdearlafunctx
 from src.ctxcommands.ctxjobsearch import jobsearchfunctx
 from src.ctxcommands.ctxf1 import formula1ctxfunc
+from src.ctxcommands.ctxmundial import mundialfunctx
                                                                  
 
 # BOFH - Discord community bot for Sysarmy
@@ -772,6 +774,11 @@ async def jobs(ctx, texto):
 async def f1(ctx, texto):
     await formula1ctxfunc(ctx, texto)
 
+# COMANDO MUNDIAL
+@bot.command()
+async def mundial(ctx):
+    await mundialfunctx(ctx)
+
 #########################################################################################
 ################### LLAMADAS DE COMANDOS SLASH NATIVOS DISCORD (TREE) ###################
 
@@ -978,6 +985,17 @@ async def formula1(interaction: discord.Interaction, opcion: app_commands.Choice
             await interaction.followup.send(response, ephemeral=True)
     else:
         await interaction.followup.send("Hubo un error o el mensaje estaba vacío.", ephemeral=True)
+
+
+ # COMANDO MUNDIAL (SLASH)
+@bot.tree.command(name="mundial", description="Partidos del dia de la Copa del Mundo FIFA 2026")
+async def mundial_slash(interaction: discord.Interaction):
+    try:
+        await interaction.response.send_message(embed=await mundialfun(interaction))
+    except Exception as e:
+        print(f"Error en /mundial: {e}")
+        await interaction.response.send_message("Comando /mundial: Error al consultar los partidos. Intenta mas tarde.")
+
 
 # COMANDO JOB POST (NATIVO DISCORD)
 @bot.tree.command(name="jobpost", description="Postear un job (solo rol recruiter)")
